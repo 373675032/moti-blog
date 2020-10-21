@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moti.mapper.FrontMapper">
+
+    <!--开启二级缓存,使用Ehcache缓存框架-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+    <!--front的映射结果集-->
+    <resultMap type="com.moti.entity.Front" id="FrontMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="background" column="background" jdbcType="VARCHAR"/>
+        <result property="notice" column="notice" jdbcType="VARCHAR"/>
+        <result property="imgTarget" column="img_target" jdbcType="VARCHAR"/>
+        <result property="noticeImg" column="notice_img" jdbcType="VARCHAR"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="subTitle" column="sub_title" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个front-->
+    <select id="queryById" resultMap="FrontMap">
+        select id, background, notice, img_target, notice_img, title, sub_title from front where id = #{id}
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update front
+        <set>
+            <if test="background != null and background != ''">
+                background = #{background},
+            </if>
+            <if test="notice != null and notice != ''">
+                notice = #{notice},
+            </if>
+            <if test="imgTarget != null and imgTarget != ''">
+                img_target = #{imgTarget},
+            </if>
+            <if test="noticeImg != null and noticeImg != ''">
+                notice_img = #{noticeImg},
+            </if>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="subTitle != null and subTitle != ''">
+                sub_title = #{subTitle},
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>

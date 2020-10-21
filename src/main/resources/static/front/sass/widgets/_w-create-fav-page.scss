@@ -1,0 +1,84 @@
+/*------------- #W-CREATE-FAV-PAGE --------------*/
+
+
+
+.w-create-fav-page {
+  padding: 25px;
+  background-color: $primary-color;
+
+  svg {
+	fill: $white-color;
+  }
+
+  .olymp-star-icon {
+	width: 20px;
+	height: 20px;
+  }
+
+  .more {
+	float: right;
+	color: #ffbfb0;
+	fill: #ffbfb0;
+  }
+
+  .icons-block {
+	margin-bottom: 80px;
+  }
+
+  .content {
+	color: $white-color;
+
+	span {
+	  font-size: 10px;
+	}
+
+	.title {
+	  line-height: 1.1;
+	  font-weight: 400;
+	  color: inherit;
+	  margin-bottom: 20px;
+	}
+  }
+
+  .btn {
+	margin-bottom: 0;
+  }
+}
+
+.page-description {
+  border: 1px solid $border-color;
+  background-color: $white-color;
+  margin-bottom: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+
+  .icon {
+	padding: 15px 18px;
+	fill: $white-color;
+	background-color: $grey-lighter;
+	border-right: 1px solid $border-color;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 25px;
+
+	svg {
+	  width: 20px;
+	  height: 20px;
+	  display: block;
+	}
+  }
+
+  span {
+	vertical-align: middle;
+  }
+}
+
+
+/*------------- Responsive mode styles --------------*/
+
+@media (max-width: 480px) {
+  .page-description {
+	display: flex;
+	align-items: center;
+  }
+}

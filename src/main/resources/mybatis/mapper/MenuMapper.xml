@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moti.mapper.MenuMapper">
+
+    <!--开启二级缓存,使用Ehcache缓存框架-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+    <!--menu的映射结果集-->
+    <resultMap type="com.moti.entity.Menu" id="MenuMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="location" column="location" jdbcType="INTEGER"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> id, name, url, location </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="name != null and name != ''">
+                name,
+        </if>
+        <if test="url != null and url != ''">
+                url,
+        </if>
+        <if test="location != null">
+                location,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="name != null and name != ''">
+                #{name},
+        </if>
+        <if test="url != null and url != ''">
+                #{url},
+        </if>
+        <if test="location != null">
+                #{location},
+        </if>
+    </sql>
+    
+    <!--通用对Menu各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="name != null and name != ''">
+                name = #{name},
+        </if>
+        <if test="url != null and url != ''">
+                url = #{url},
+        </if>
+        <if test="location != null">
+                location = #{location},
+        </if>
+    </sql>
+    
+    <!--新增menu:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除menu:通过主键-->
+    <delete id="deleteById">
+        delete from menu
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+    
+    <!--查询单个menu-->
+    <select id="queryById" resultMap="MenuMap">
+        select
+        <include refid="allColumn"></include>
+        from menu
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="MenuMap">
+        select
+          <include refid="allColumn"></include>
+        from menu
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsValue"></include>
+        </trim>
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update menu
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>

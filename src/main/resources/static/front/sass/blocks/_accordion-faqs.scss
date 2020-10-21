@@ -1,0 +1,73 @@
+/*------------- #ACCORDION-FAQS --------------*/
+
+
+
+.accordion-faqs {
+  .icons-wrap {
+	display: inline-block;
+	position: relative;
+	margin-left: 20px;
+
+	svg {
+	  fill: $primary-color;
+	  transition: opacity .3s ease;
+	}
+
+	.olymp-plus-icon {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  opacity: 0;
+	}
+  }
+
+  .card-header .collapsed {
+	.olymp-accordion-close-ico {
+	  opacity: 0;
+	}
+
+	.olymp-plus-icon {
+	  opacity: 1;
+	}
+  }
+
+  .card-header {
+	padding: 60px 0;
+	border: none;
+	border-top: 1px solid #e6ecf5;
+
+	&:first-child {
+	  border-top: none;
+	}
+  }
+
+  .collapse {
+	margin-bottom: 60px;
+  }
+
+  svg {
+	width: 12px;
+	height: 12px;
+  }
+
+  .card-header a {
+	display: flex;
+	align-items: baseline;
+  }
+}
+
+
+
+/*================= Responsive Mode ============*/
+
+
+@media (max-width: 600px) {
+
+  .accordion-faqs .card-header {
+	padding: 30px 0;
+  }
+
+  .accordion-faqs .collapse {
+	margin-bottom: 20px;
+  }
+}

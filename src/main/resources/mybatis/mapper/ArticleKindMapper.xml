@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moti.mapper.ArticleKindMapper">
+
+    <!--article_kind的映射结果集-->
+    <resultMap type="com.moti.entity.ArticleKind" id="ArticleKindMap">
+        <result property="articleId" column="article_id" jdbcType="INTEGER"/>
+        <result property="kindId" column="kind_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--全部字段-->
+    <sql id="allColumn"> article_id, kind_id </sql>
+
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="articleId != null and articleId != ''">
+            article_id,
+        </if>
+        <if test="kindId != null and kindId != ''">
+            kind_id,
+        </if>
+    </sql>
+
+    <!--添加语句的值列表-->
+    <sql id="insertValue">
+        <if test="articleId != null and articleId != ''">
+            #{articleId},
+        </if>
+        <if test="kindId != null and kindId != ''">
+            #{kindId},
+        </if>
+    </sql>
+
+    <!--通用对ArticleTag各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="articleId != null and articleId != ''">
+            article_id = #{articleId},
+        </if>
+        <if test="kindId != null and kindId != ''">
+            kind_id = #{kindId},
+        </if>
+    </sql>
+    
+    <!--新增article_kind:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="articleId" useGeneratedKeys="true">
+        insert into article_kind
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除article_kind:通过主键-->
+    <delete id="deleteById">
+        delete from article_kind
+        <where>
+            article_id = #{articleId}
+        </where>
+    </delete>
+
+    <!--根据文集ID获取关联文章的数量-->
+    <select id="getArticleCount" resultType="java.lang.Integer">
+        select count(*) from article_kind where kind_id = #{id}
+    </select>
+
+    <!--根据文章ID查询所有分类-->
+    <select id="queryByArticleId" resultType="com.moti.entity.Kind">
+        select k.name,k.id from kind k
+        left join article_kind ak on k.id = ak.kind_id where ak.article_id=#{id};
+    </select>
+
+</mapper>

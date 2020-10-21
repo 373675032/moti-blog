@@ -1,0 +1,132 @@
+
+<!-- Window-popup Create Event -->
+
+<div class="modal fade" id="create-event" tabindex="-1" role="dialog" aria-labelledby="create-event" aria-hidden="true">
+	<div class="modal-dialog window-popup create-event" role="document">
+		<div class="modal-content">
+			<a href="#" class="close icon-close" data-dismiss="modal" aria-label="Close">
+				<svg class="olymp-close-icon"><use xlink:href="svg-icons/sprites/icons.svg#olymp-close-icon"></use></svg>
+			</a>
+			<div class="modal-header">
+				<h6 class="title">Create an Event</h6>
+			</div>
+
+			<div class="modal-body">
+				<div class="form-group label-floating is-select">
+					<label class="control-label">Personal Event</label>
+					<select class="selectpicker form-control">
+						<option value="MA">Private Event</option>
+						<option value="FE">Personal Event</option>
+					</select>
+				</div>
+
+				<div class="form-group label-floating">
+					<label class="control-label">Event Name</label>
+					<input class="form-control" placeholder="" value="Take Querty to the Veterinarian" type="text">
+				</div>
+
+				<div class="form-group label-floating is-empty">
+					<label class="control-label">Event Location</label>
+					<input class="form-control" placeholder="" value="" type="text">
+				</div>
+
+				<div class="form-group date-time-picker label-floating">
+					<label class="control-label">Event Date</label>
+					<input name="datetimepicker" value="26/03/2016">
+					<span class="input-group-addon">
+					<svg class="olymp-calendar-icon icon"><use xlink:href="svg-icons/sprites/icons.svg#olymp-calendar-icon"></use></svg>
+				</span>
+				</div>
+
+				<div class="row">
+					<div class="col col-lg-3 col-md-3 col-sm-12 col-12">
+						<div class="form-group label-floating">
+							<label class="control-label">Event Time</label>
+							<input class="form-control" placeholder="" value="09:00" type="text">
+						</div>
+					</div>
+					<div class="col col-lg-3 col-md-3 col-sm-12 col-12">
+						<div class="form-group label-floating is-select">
+							<label class="control-label">AM-PM</label>
+							<select class="selectpicker form-control">
+								<option value="MA">AM</option>
+								<option value="FE">PM</option>
+							</select>
+						</div>
+					</div>
+					<div class="col col-lg-6 col-md-6 col-sm-12 col-12">
+						<div class="form-group label-floating is-select">
+							<label class="control-label">Timezone</label>
+							<select class="selectpicker form-control">
+								<option value="MA">US (UTC-8)</option>
+								<option value="FE">UK (UTC-0)</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="form-group label-floating">
+					<label class="control-label">Event Description</label>
+					<textarea class="form-control" placeholder="">I need to take Querty for a check up and ask the doctor if he needs a new tank.
+					</textarea>
+				</div>
+
+				<form class="form-group label-floating is-select">
+					<svg class="olymp-happy-face-icon">
+						<use xlink:href="svg-icons/sprites/icons.svg#olymp-happy-face-icon"></use>
+					</svg>
+
+					<select class="selectpicker form-control style-2 show-tick" multiple data-live-search="true">
+						<option title="Green Goo Rock" data-content='<div class="inline-items">
+										<div class="author-thumb">
+											<img src="img/avatar52-sm.jpg" alt="author">
+										</div>
+											<div class="h6 author-title">Green Goo Rock</div>
+
+										</div>'>Green Goo Rock
+						</option>
+
+						<option title="Mathilda Brinker" data-content='<div class="inline-items">
+											<div class="author-thumb">
+												<img src="img/avatar74-sm.jpg" alt="author">
+											</div>
+											<div class="h6 author-title">Mathilda Brinker</div>
+										</div>'>Mathilda Brinker
+						</option>
+
+						<option title="Marina Valentine" data-content='<div class="inline-items">
+											<div class="author-thumb">
+												<img src="img/avatar48-sm.jpg" alt="author">
+											</div>
+											<div class="h6 author-title">Marina Valentine</div>
+										</div>'>Marina Valentine
+						</option>
+
+						<option title="Dave Marinara" data-content='<div class="inline-items">
+											<div class="author-thumb">
+												<img src="img/avatar75-sm.jpg" alt="author">
+											</div>
+											<div class="h6 author-title">Dave Marinara</div>
+										</div>'>Dave Marinara
+						</option>
+
+						<option title="Rachel Howlett" data-content='<div class="inline-items">
+											<div class="author-thumb">
+												<img src="img/avatar76-sm.jpg" alt="author">
+											</div>
+											<div class="h6 author-title">Rachel Howlett</div>
+										</div>'>Rachel Howlett
+						</option>
+
+					</select>
+				</form>
+
+				<button class="btn btn-breez btn-lg full-width">Create Event</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ... end Window-popup Create Event -->

@@ -1,0 +1,80 @@
+/*------------- #W-BIRTHDAY-ALERT --------------*/
+
+
+
+.w-birthday-alert {
+  background-image: url("../img/bg-birthdays.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 25px;
+
+  .more {
+	float: right;
+	opacity: .7;
+	color: $white-color;
+	fill: $white-color;
+  }
+
+  .icons-block {
+	margin-bottom: 35px;
+	fill: $white-color;
+	color: $white-color;
+  }
+
+  .olymp-cupcake-icon {
+	width: 24px;
+	height: 20px;
+  }
+
+  .author-thumb img {
+	width: 28px;
+	height: 28px;
+	border: 2px solid $white-color;
+	margin-bottom: 12px;
+  }
+
+  .content {
+	color: $white-color;
+
+	span {
+	  font-size: 10px;
+	  margin-bottom: 4px;
+	  display: block;
+	}
+
+	.title {
+	  line-height: 1.3;
+	  font-weight: 400;
+	  color: inherit;
+	  margin-bottom: 20px;
+	  font-size: 24px;
+	  display: block;
+	}
+
+	p {
+	  font-size: 12px;
+	}
+  }
+}
+
+.author-thumb {
+  display: inline-block;
+  position: relative;
+
+  img {
+	border-radius: 100%;
+	overflow: hidden;
+	max-width: unset;
+	display: block;
+  }
+
+  .icon-status {
+	position: absolute;
+	margin-right: 0;
+	top: 0;
+	left: 0;
+	border: 1px solid #3f4257;
+	width: 8px;
+	height: 8px;
+  }
+}

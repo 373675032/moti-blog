@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moti.mapper.CommentMapper">
+
+    <!--开启二级缓存,使用Ehcache缓存框架-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+    <!--comment的映射结果集-->
+    <resultMap type="com.moti.entity.Comment" id="CommentMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="articleId" column="article_id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="OTHER"/>
+        <result property="replyId" column="reply_id" jdbcType="INTEGER"/>
+        <result property="img" column="img" jdbcType="VARCHAR"/>
+        <result property="time" column="time" jdbcType="TIMESTAMP"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> id, article_id, name, email, content, reply_id, img, time, type, ip, status </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="articleId != null">
+                article_id,
+        </if>
+        <if test="name != null and name != ''">
+                `name`,
+        </if>
+        <if test="email != null and email != ''">
+                email,
+        </if>
+        <if test="content != null">
+                content,
+        </if>
+        <if test="replyId != null">
+                reply_id,
+        </if>
+        <if test="img != null and img != ''">
+                img,
+        </if>
+        <if test="time != null">
+                `time`,
+        </if>
+        <if test="type != null">
+                `type`,
+        </if>
+        <if test="status != null">
+                `status`,
+        </if>
+        <if test="ip != null and ip != ''">
+                ip,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="articleId != null">
+                #{articleId},
+        </if>
+        <if test="name != null and name != ''">
+                #{name},
+        </if>
+        <if test="email != null and email != ''">
+                #{email},
+        </if>
+        <if test="content != null">
+                #{content},
+        </if>
+        <if test="replyId != null">
+                #{replyId},
+        </if>
+        <if test="img != null and img != ''">
+                #{img},
+        </if>
+        <if test="time != null">
+                #{time},
+        </if>
+        <if test="type != null">
+                #{type},
+        </if>
+        <if test="status != null">
+                #{status},
+        </if>
+        <if test="ip != null and ip != ''">
+                #{ip},
+        </if>
+    </sql>
+    
+    <!--通用对Comment各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="articleId != null">
+                article_id = #{articleId},
+        </if>
+        <if test="name != null and name != ''">
+                `name` = #{name},
+        </if>
+        <if test="email != null and email != ''">
+                email = #{email},
+        </if>
+        <if test="content != null">
+                content = #{content},
+        </if>
+        <if test="replyId != null">
+                reply_id = #{replyId},
+        </if>
+        <if test="img != null and img != ''">
+                img = #{img},
+        </if>
+        <if test="time != null">
+                `time` = #{time},
+        </if>
+        <if test="type != null">
+                `type` = #{type},
+        </if>
+        <if test="ip != null and ip != ''">
+                ip = #{ip},
+        </if>
+        <if test="status != null and status != ''">
+                status = #{status},
+        </if>
+    </sql>
+    
+    <!--新增comment:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除comment:通过主键-->
+    <delete id="deleteById">
+        delete from comment
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <!--删除comment:通过回复的id-->
+    <delete id="deleteByReplyId">
+        delete from comment
+        <where>
+            reply_id = #{id}
+        </where>
+    </delete>
+
+    <!--删除comment:通过文章的id-->
+    <delete id="deleteByArticleId">
+        delete from comment
+        <where>
+            article_id = #{id}
+        </where>
+    </delete>
+
+    <!--查询单个comment-->
+    <select id="queryById" resultMap="CommentMap">
+        select
+        <include refid="allColumn"></include>
+        from comment
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CommentMap">
+        select
+          <include refid="allColumn"></include>
+        from comment
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsValue"></include>
+        </trim>
+    </select>
+
+    <!--根据文章ID和类型获取文章-->
+    <select id="queryByArticleIdAndType" resultType="com.moti.entity.Comment">
+        select
+        <include refid="allColumn"></include>
+        from comment where article_id = #{aId} and `type` = #{type}
+        order by `time` desc
+    </select>
+
+    <!--获取所有回复的文章-->
+    <select id="queryReplyComment" resultType="com.moti.entity.Comment">
+        select
+        <include refid="allColumn"></include>
+        from comment where reply_id = #{id}
+        order by `time` desc
+    </select>
+
+    <!--获取评论的数量-->
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(*) from comment
+    </select>
+
+    <!--获取未读评论的数量-->
+    <select id="getUnReadCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM COMMENT WHERE STATUS = 0 AND TYPE = 0
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update comment
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>

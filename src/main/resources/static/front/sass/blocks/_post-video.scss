@@ -1,0 +1,53 @@
+/*------------- #POST-VIDEO --------------*/
+
+
+
+.post-video {
+  border: 1px solid $border-color;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 20px 0;
+
+  .video-content {
+	padding: 20px;
+	overflow: hidden;
+
+	.title {
+	  display: block;
+	}
+
+	p {
+	  margin: 10px 0;
+	  font-size: 13px;
+	}
+
+	.link-site {
+	  font-size: 10px;
+	  color: $grey-lighter;
+
+	  &:hover {
+		color: $primary-color;
+	  }
+	}
+  }
+}
+
+.video-thumb {
+  position: relative;
+  float: left;
+
+  img {
+	display: block;
+	width: 100%;
+  }
+}
+
+
+/*------------- Responsive mode styles --------------*/
+
+@media (max-width: 480px) {
+  .video-thumb {
+	float: none;
+  }
+}
+

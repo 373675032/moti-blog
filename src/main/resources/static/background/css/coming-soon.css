@@ -1,0 +1,555 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic,600,600italic,700,700italic,900,900italic");
+
+*
+{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html
+{
+	height: 100%;
+	overflow: auto;
+}
+
+body
+{
+	font-family: "Source Sans Pro", Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	line-height: 32px;
+	font-weight: 300;
+	color: #999;
+	background: #FFF;
+	vertical-align: baseline;
+}
+
+.clearfix {
+    display: block;
+}
+
+::selection
+{
+	background: #149077;
+	color: #FFF;
+}
+
+::-moz-selection
+{
+	background: #149077;
+	color: #FFF;
+}
+
+a
+{
+	color: #16A085;
+	text-decoration: none;
+}
+
+	a:hover
+	{
+		color: #444;
+	}
+
+/* ==================================================
+   Default Typography
+================================================== */
+
+p
+{
+	margin: 0 0 20px 0;
+}
+
+h1, h2, h3
+{
+	font-size: 60px;
+	line-height: 60px;
+	margin: 0 0 20px 0;
+	letter-spacing: -1px;
+	font-weight: 300;
+	text-transform: uppercase;
+}
+
+h2 {
+	font-size: 38px;
+	line-height: 38px;
+}
+		
+h3 {
+	font-size: 32px;
+	line-height: 32px;
+}
+
+/* ==================================================
+   Background Colours
+================================================== */
+
+.colour1
+{
+	background: #4a75ab;
+}
+
+.colour2
+{
+	background: #2e2f67;
+}
+
+.colour3
+{
+	background: #EEE;
+}
+
+
+/* ==================================================
+   Separator Arrows
+================================================== */
+
+.arrow-separator
+{
+	position: relative;
+}
+
+	.arrow-separator:after
+	{
+		top: 100%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+		border-width: 12px;
+		left: 50%;
+		margin-left: -12px;
+		z-index: 11;
+	}
+	
+		.arrow-white:after
+		{
+			border-color: #FFF rgba(255,255,255,0) rgba(255,255,255,0) rgba(255,255,255,0); 
+		}
+		
+		.arrow-theme:after
+		{
+			border-color: #4a74ab  rgba(22,160,133,0) rgba(22,160,133,0) rgba(22,160,133,0);
+		}
+		
+		.arrow-themelight:after
+		{
+			border-color: #2f3067  rgba(26,188,156,0) rgba(26,188,156,0) rgba(26,188,156,0);
+		}
+
+		.arrow-grey:after
+		{
+			border-color: #EEE rgba(238,238,238,0) rgba(238,238,238,0) rgba(238,238,238,0);
+		}
+
+/* ==================================================
+   General Layout Styles
+================================================== */
+
+.fullwidth
+{
+	width: 100%;
+	padding: 60px 30px;
+	min-width: 280px;
+}
+
+	.fullwidth .bodycontainer
+	{
+		margin: 0 auto;
+		width: 100%;
+		max-width: 1000px;
+		text-align: center;
+	}
+	
+#topcontainer
+{
+
+}
+
+	#topcontainer h1
+	{
+		padding: 6px 0 10px 0;
+		margin-bottom: 0;
+		letter-spacing: -1.5px;
+		color: #444;
+		font-weight: 400;
+	}
+	
+		#topcontainer h1 span
+		{
+			font-size: 70px;
+			line-height: 70px;
+			letter-spacing: -1.4px;
+			font-weight: 300;
+		}
+
+	#topcontainer p
+	{
+		margin-bottom: 0;
+		color: #999;
+	}
+
+	#topcontainer p span
+	{
+		font-size: 100px;
+		line-height: 100px;
+		color: #4a74ab;
+	}
+	
+#countdown
+{
+	color: #FFF;
+}
+
+	#countdown #countdowncont
+	{
+		width: 100%;
+		max-width: 700px;
+		margin: 0 auto;
+		height: 120px;
+	}
+
+		#countdown #countdowncont ul#countscript li
+		{
+			float: left;
+			width: 25%;
+			padding: 30px 0;
+			margin: 0;
+			list-style-type: none;
+		}
+
+			#countdown #countdowncont ul#countscript li span
+			{
+				font-size: 80px;
+				line-height: 80px;
+				font-weight: 300;
+				color: #FFF;
+			}
+
+			#countdown #countdowncont ul#countscript li p
+			{
+				color: rgba(255, 255, 255, 0.6);
+				font-weight: 300;
+				text-transform: uppercase;
+				font-size: 18px;
+				line-height: 18px;
+				margin: 0;
+			}
+		
+#maincont
+{
+	color: #FFF;
+}
+
+	#maincont a
+	{
+		color: #FFF;
+		opacity: 0.6;
+	}
+	
+		#maincont a:hover
+		{
+			opacity: 1;
+		}
+	
+	#maincont #signupform
+	{
+		margin: 0 auto 20px auto;
+		width: 80%;
+	}
+
+		.sb-search
+		{
+			position: relative;
+			width: 100%;
+			min-width: 50px;
+			height: 50px;
+			overflow: hidden;
+		}
+
+			.sb-search .sb-search-input
+			{
+				position: absolute;
+				top: 0;
+				right: 0;
+				border: none;
+				outline: none;
+				background: #FFF;
+				border: 0;
+				width: 100%;
+				height: 50px;
+				margin: 0;
+				z-index: 10;
+				padding: 0 65px 0 15px;
+				font-family: inherit;
+				font-size: 20px;
+				color: #333;
+				
+				-webkit-border-radius: 0px;
+				-moz-border-radius: 0px;
+				border-radius: 0px;
+				
+				-webkit-appearance: none;
+			}
+
+		button.formbutton, .sb-search-submit 
+		{
+			width: 60px;
+			height: 60px;
+			display: block;
+			position: absolute;
+			right: 0;
+			top: 0;
+			padding: 0;
+			margin: 0;
+			text-align: center;
+			cursor: pointer;
+		}
+
+			.sb-search-submit
+			{
+				background: #FFF; /* IE needs this */
+				-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; /* IE 8 */
+				filter: alpha(opacity=0); /* IE 5-7 */
+				opacity: 0;
+				color: transparent;
+				border: none;
+				outline: none;
+				z-index: -1;
+			}
+			
+			button.formbutton
+			{
+				color: #FFF;
+				background: #4a74ab;
+				z-index: 90;
+				border: 0;
+				height: 50px;
+			}
+			
+			button.formbutton span
+			{
+				font-size: 19px;
+			}
+			
+				button.formbutton:hover
+				{
+					background: #4a74ab;
+				}
+			
+#quotecont
+{
+	padding: 30px 0;
+}
+
+	#quotecont .owl-theme .owl-controls .owl-page span
+	{
+		background: #CCC;
+	}
+	
+		#quotecont .owl-theme .owl-controls .owl-page.active span,
+		#quotecont .owl-theme .owl-controls.clickable .owl-page:hover span
+		{
+			background: #1ABC9C;
+		}
+
+#footercont
+{
+	position: relative;
+	font-size: 18px;
+}
+
+	#footercont #socialmedia ul
+	{
+		margin: 0 0 30px 0;
+	}
+
+	#footercont #socialmedia ul li
+	{
+		display: inline-block;
+		list-style-type: none;
+		margin: 0 10px;
+	}
+
+		#footercont #socialmedia ul li a
+		{
+			font-size: 36px;
+			color: #999;
+		}
+		
+			#footercont #socialmedia ul li a:hover
+			{
+				color: #1ABC9C;
+			}
+			
+	#footercont p.backtotop
+	{
+		margin: 0 0 40px 0;
+	}
+
+		#footercont p.backtotop a
+		{
+			position: relative;
+			display: inline-block;
+			background: #EEE;
+			font-size: 32px;
+			line-height: 32px;
+			color: #999;
+			padding: 5px 12px;
+			
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			border-radius: 4px;
+		}
+		
+			#footercont p.backtotop a:hover
+			{
+				background-color: #1ABC9C;
+				color: #FFF;
+				text-decoration: none;
+			}
+			
+				#footercont p.backtotop a:active
+				{
+					top: 2px;
+				}
+
+/* ==================================================
+   Responsive Media Queries - Tablets
+================================================== */
+
+@media screen and (max-width: 768px)
+{
+
+	body
+	{
+		font-size: 23px;
+		line-height: 29px;
+	}
+	
+	#topcontainer h1
+	{
+		font-size: 54px;
+		line-height: 54px;
+		letter-spacing: -1.2px;
+	}
+
+		#topcontainer h1 span
+		{
+			font-size: 70px;
+			line-height: 70px;
+		}
+	
+	#countdown #countdowncont
+	{
+		max-width: 400px;
+	}
+	
+		#countdown #countdowncont ul#countscript li
+		{
+			width: 50%;
+			padding: 10px 0;
+		}
+		
+			#countdown #countdowncont ul#countscript li span
+			{
+				font-size: 70px;
+				line-height: 70px;
+			}
+			
+	#quotecont
+	{
+		padding: 15px 0;
+	}
+		
+	#footercont
+	{
+		font-size: 19px;
+	}
+		
+		#footercont #footerleft
+		{
+			float: none;
+			padding: 30px 0;
+			text-align: center;
+		}
+		
+			#footercont #socialmedia ul li a
+			{
+				font-size: 32px;
+			}
+		
+		#footercont #footerright
+		{
+			float: none;
+		}
+	
+}
+
+/* ==================================================
+   Responsive Media Queries - Mobiles
+================================================== */
+
+@media screen and (max-width: 480px)
+{	
+
+	body
+	{
+		font-size: 21px;
+		line-height: 27px;
+	}
+	
+	#topcontainer h1
+	{
+		font-size: 36px;
+		line-height: 36px;
+		
+	}
+
+		#topcontainer h1 span
+		{
+			font-size: 50px;
+			line-height: 50px;
+		}
+	
+	#countdown #countdowncont ul#countscript li
+	{
+		padding: 6px 0;
+	}
+	
+		#countdown #countdowncont ul#countscript li span
+		{
+			font-size: 62px;
+			line-height: 62px;
+		}
+
+		#countdown #countdowncont ul#countscript li p
+		{
+			font-size: 16px;
+			line-height: 16px;
+		}
+		
+	#maincont #signupform
+	{
+		margin: 0 auto 20px auto;
+		width: 100%;
+	}
+	
+	#quotecont
+	{
+		padding: 5px 0;
+	}
+	
+	#footercont #socialmedia ul li
+	{
+		margin: 0 5px;
+	}
+	
+		#footercont #socialmedia ul li a
+		{
+			font-size: 28px;
+		}
+	
+}

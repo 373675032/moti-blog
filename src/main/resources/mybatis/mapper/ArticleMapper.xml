@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moti.mapper.ArticleMapper">
+
+    <!--开启二级缓存,使用Ehcache缓存框架-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+    <!--article的映射结果集-->
+    <resultMap type="com.moti.entity.Article" id="ArticleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="OTHER"/>
+        <result property="publishTime" column="publish_time" jdbcType="TIMESTAMP"/>
+        <result property="recentEdit" column="recent_edit" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="readCount" column="read_count" jdbcType="INTEGER"/>
+        <result property="introduce" column="introduce" jdbcType="VARCHAR"/>
+        <result property="img" column="img" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--全部字段-->
+    <sql id="allColumn"> id, title, content, publish_time, recent_edit, status, read_count, introduce, img </sql>
+
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="title != null and title != ''">
+            title,
+        </if>
+        <if test="content != null">
+            content,
+        </if>
+        <if test="publishTime != null">
+            publish_time,
+        </if>
+        <if test="recentEdit != null">
+            recent_edit,
+        </if>
+        <if test="status != null">
+            status,
+        </if>
+        <if test="readCount != null">
+            read_count,
+        </if>
+        <if test="introduce != null and introduce != ''">
+            introduce,
+        </if>
+        <if test="img != null and img != ''">
+            img,
+        </if>
+    </sql>
+
+    <!--添加语句的值列表-->
+    <sql id="insertValue">
+        <if test="title != null and title != ''">
+            #{title},
+        </if>
+        <if test="content != null">
+            #{content},
+        </if>
+        <if test="publishTime != null">
+            #{publishTime},
+        </if>
+        <if test="recentEdit != null">
+            #{recentEdit},
+        </if>
+        <if test="status != null">
+            #{status},
+        </if>
+        <if test="readCount != null">
+            #{readCount},
+        </if>
+        <if test="introduce != null and introduce != ''">
+            #{introduce},
+        </if>
+        <if test="img != null and img != ''">
+            #{img},
+        </if>
+    </sql>
+
+    <!--通用对Article各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="title != null and title != ''">
+            title = #{title},
+        </if>
+        <if test="content != null">
+            content = #{content},
+        </if>
+        <if test="publishTime != null">
+            publish_time = #{publishTime},
+        </if>
+        <if test="recentEdit != null">
+            recent_edit = #{recentEdit},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="readCount != null">
+            read_count = #{readCount},
+        </if>
+        <if test="introduce != null and introduce != ''">
+            introduce = #{introduce},
+        </if>
+        <if test="img != null and img != ''">
+            img = #{img},
+        </if>
+    </sql>
+
+    <!--新增article:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+
+    <!--删除article:通过主键-->
+    <delete id="deleteById">
+        delete from article where id = #{id}
+    </delete>
+
+    <!--删除全部回收站文章-->
+    <delete id="deleteTrash">
+        delete from articlewhere status = 2
+    </delete>
+
+    <!--查询单个article-->
+    <select id="queryById" resultMap="ArticleMap">
+        select id, title, content, publish_time, recent_edit, status, read_count, introduce, img from article where id = #{id}
+    </select>
+
+    <!--根据条件获取文章数量-->
+    <select id="totalCount" resultType="java.lang.Integer">
+        select count(*) from article where status = #{status}
+    </select>
+
+    <!--根据阅读量降序-->
+    <select id="orderByReadCount" resultType="com.moti.entity.Article">
+        select id, title, read_count from article where status = 1 order by read_count desc
+    </select>
+
+    <!--获得文章日期归档-->
+    <select id="getArchive" resultType="com.moti.entity.ArticleDateArchive">
+        SELECT DATE_FORMAT(publish_time, '%Y年 - %m月') `date`, COUNT(*) `count` FROM article WHERE status = 1 GROUP BY DATE_FORMAT(publish_time, '%Y年 - %m月') ORDER BY DATE_FORMAT(publish_time, '%Y年 - %m月') DESC
+    </select>
+
+    <!--根据发表时间降序获取文章-->
+    <select id="orderByPublishTime" resultType="com.moti.entity.Article">
+        select id, title, publish_time, read_count, introduce, img from article where status = 1 order by publish_time desc
+    </select>
+
+    <!--根据Id获得文章标题-->
+    <select id="getTitle" resultType="java.lang.String">
+        select title from article where id = #{aId}
+    </select>
+
+    <!--根据标签ID获取已发布的文章-->
+    <select id="findByTagId" resultType="com.moti.entity.Article">
+        SELECT a.id, title, publish_time, read_count, introduce, img from article a LEFT JOIN article_tag `at` on a.id = `at`.article_id WHERE a.`status` = 1 and `at`.tag_id = #{id}
+    </select>
+
+    <!--根据文集ID获取已发布的文章-->
+    <select id="findByKindId" resultType="com.moti.entity.Article">
+        SELECT a.id, title, publish_time, read_count, introduce, img from article a LEFT JOIN article_kind `ak` on a.id = `ak`.article_id WHERE a.`status` = 1 and `ak`.kind_id = #{id}
+    </select>
+
+    <!--根据日期归档获取文章-->
+    <select id="findByDate" resultType="com.moti.entity.Article">
+        select id, title, publish_time, read_count, introduce, img from article where DATE_FORMAT(publish_time,'%Y-%m')=DATE_FORMAT(#{date},'%Y-%m') and status = 1
+    </select>
+
+    <!--根据状态获取文章-->
+    <select id="queryByStatus" resultType="com.moti.entity.Article">
+        select id, title, content, publish_time, recent_edit, read_count, introduce, img from article where status = #{status} order by recent_edit desc
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update article
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

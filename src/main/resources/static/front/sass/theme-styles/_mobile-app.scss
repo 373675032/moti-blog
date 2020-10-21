@@ -1,0 +1,427 @@
+/*------------- #Mobile APP --------------*/
+
+
+.mobile-app {
+
+  .chat-settings {
+	padding: 15px 40px;
+
+	a {
+	  color: $body-font-color;
+	  padding: 7px 0;
+	  display: block;
+
+	  &:hover {
+		color: $heading-color;
+	  }
+	}
+
+	.icon-status {
+	  margin-right: 20px;
+	  position: relative;
+	  border: none;
+	}
+  }
+
+  .olympus-chat {
+	position: relative;
+	display: block;
+  }
+
+  .sidebar--large .olympus-chat {
+	padding: 25px 15px 25px 50px;
+  }
+
+  .search-friend {
+	position: relative;
+	bottom: auto;
+	box-shadow: none;
+  }
+
+  .fixed-sidebar {
+	position: fixed;
+	float: none;
+	min-height: 70px;
+
+	&.open {
+	  min-height: 1000vh;
+	}
+  }
+
+  .fixed-sidebar-right.sidebar--large {
+	width: 260px;
+	position: absolute;
+  }
+
+  .fixed-sidebar .search-friend svg {
+	width: 16px;
+	height: 16px;
+  }
+
+  .fixed-sidebar-right {
+	padding-bottom: 0;
+	border-left: none;
+	bottom: auto;
+  }
+
+  .header {
+	padding-left: 70px;
+
+	@media (max-width: 768px) {
+	 min-width: 300px;
+	}
+  }
+
+  .fixed-sidebar.right {
+	top: 0;
+	z-index: 30;
+	min-height: 70px;
+
+	&.open {
+	  min-height: 1000vh;
+	}
+
+	@media (max-width: 768px) {
+	  display: block;
+	}
+  }
+
+  .fixed-sidebar.right .mCustomScrollbar {
+	max-height: calc(100vh - 140px);
+  }
+
+  .fixed-sidebar .mCustomScrollbar {
+	max-height: calc(100vh - 70px);
+  }
+
+  .fixed-sidebar {
+	transition: all .3s ease;
+  }
+
+  .fixed-sidebar .ui-block-title:first-child {
+	border-top: 1px solid $border-color;
+  }
+
+  .fixed-sidebar-left .ui-block-title:first-child {
+	border-top: none;
+  }
+
+  .fixed-sidebar-left.sidebar--small {
+	height: auto;
+	position: absolute;
+  }
+
+  .left-menu {
+	padding: 0;
+  }
+
+  .left-menu a {
+	color: #515365;
+
+	&:hover {
+	  color: $primary-color;
+	}
+  }
+
+  .fixed-sidebar-left.sidebar--large {
+	width: 260px;
+	position: absolute;
+  }
+
+  .fixed-sidebar-right.sidebar--small {
+	position: absolute;
+  }
+
+  .search-bar.w-search {
+	width: 100%;
+	max-width: 100%;
+  }
+
+  .top-header-author {
+	position: relative;
+	bottom: auto;
+	margin-top: -20px;
+	color: $body-font-color;
+
+	.author-name {
+	  color: $heading-color;
+	}
+  }
+
+  .comment-form .form-group {
+	width: 80%;
+  }
+
+  .ui-block {
+	margin-bottom: 40px;
+  }
+
+  .profile-section {
+
+	.control-block-button {
+	  right: auto;
+	  top: auto;
+	  left: 50%;
+	  transform: translate(-50%, 0);
+	  bottom: -22px;
+	  width: 100%;
+	  text-align: center;
+	  z-index: 5;
+	}
+  }
+
+  .post-control-button .btn-control {
+	display: inline-block;
+  }
+
+  .post .control-block-button {
+	right: 20px;
+	top: -13px;
+  }
+
+  .post-additional-info .comments-shared {
+	margin-top: 0;
+  }
+
+  .post__author .more {
+	margin-right: 0;
+  }
+
+  .post-video .video-content {
+	padding: 4px 12px;
+  }
+
+  .view-all {
+	position: relative;
+	bottom: auto;
+  }
+
+  .ui-block-title a {
+	color: $heading-color;
+  }
+
+  .ui-block-title .items-round-little {
+	color: $white-color;
+  }
+
+  .notification-list .notification-event {
+	padding-left: 10px;
+  }
+
+  .friend-requests .chat-message-item {
+	font-size: 10px;
+  }
+
+  .notification-list .notification-friend {
+	font-size: 13px;
+  }
+
+  .notification-list.chat-message .notification-event {
+	width: auto;
+  }
+
+  .icon-close {
+	right: 50%;
+	margin-right: -9px;
+  }
+
+  .main-header {
+	max-width: 100%;
+	padding: 40px 15px 90px;
+  }
+
+  .img-bottom {
+	max-height: 80px;
+  }
+
+  .choose-photo-item {
+	padding: 0 5px 5px 0;
+  }
+
+  .choose-from-my-photo .btn + .btn {
+	margin-left: 5px;
+  }
+
+  .profile-settings-responsive {
+	transform: translateX(-100%);
+  }
+
+  &.page-has-left-panels {
+	padding-left: 0;
+  }
+
+  &.page-has-right-panels {
+	padding-right: 0;
+  }
+}
+
+.about-olympus {
+  padding: 0 25px;
+  margin-bottom: 15px;
+
+  a {
+	padding: 7px 0;
+	font-size: 12px;
+	color: #515365;
+	display: block;
+	font-weight: 700;
+
+	&:hover {
+	  color: $primary-color;
+	}
+  }
+}
+
+.mobile-app-tabs {
+  background-color: $secondary-color;
+  border-bottom-color: transparent;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 7px;
+  height: 70px;
+  padding: 0 13px;
+  position: relative;
+  width: 100%;
+
+  .nav-link {
+	height: 100%;
+	border-color: transparent;
+	padding: 0 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	border-bottom: 3px solid transparent;
+
+	&:hover, &:focus {
+	  border-color: transparent;
+	}
+  }
+
+  .olymp-close-icon {
+	display: none;
+  }
+
+  .olymp-magnifying-glass-icon {
+	width: 18px;
+  }
+
+  .nav-link.active {
+	background-color: transparent;
+	border-color: transparent;
+	border-bottom-color: $primary-color;
+
+	svg {
+	  fill: $white-color;
+	}
+
+	.olymp-close-icon {
+	  display: block;
+	  width: 18px;
+	  height: 18px;
+	}
+
+	.olymp-magnifying-glass-icon {
+	  display: none;
+	  width: 18px;
+	}
+  }
+
+  .nav-item {
+	margin-bottom: 0;
+	height: 70px;
+  }
+
+  svg {
+	fill: $icon-color;
+	height: 20px;
+	width: 24px;
+  }
+
+  .control-icon {
+	position: relative;
+	margin-right: 0;
+	display: flex;
+  }
+
+}
+
+.nav-tabs .app-tabs-close {
+  position: absolute;
+  bottom: -55px;
+  left: 50%;
+  margin-left: -33px;
+  z-index: 20;
+
+  &:hover svg {
+	fill: $primary-color;
+  }
+}
+
+
+/*------------- Responsive mode styles --------------*/
+
+@media (max-width: 768px) {
+
+  body.mobile-app {
+	min-width: 300px;
+	overflow-x: hidden;
+  }
+
+  .mobile-app .container {
+	min-width: 300px;
+  }
+
+  .mobile-app .notification-list.friend-requests .selectize-dropdown .notification-icon {
+	float: right;
+  }
+
+  .mobile-app-tabs .nav-item {
+	width: auto;
+  }
+
+  .mobile-app-tabs .nav-link {
+	padding: 0 5px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .mobile-app .choose-photo-item {
+	width: 50%;
+  }
+
+  .mobile-app .upload-photo-item {
+	padding: 10px;
+  }
+
+  .mobile-app .choose-from-my-photo .btn {
+	width: 100%;
+  }
+
+  .mobile-app .upload-photo-item svg {
+	margin-bottom: 10px;
+  }
+
+  .mobile-app .remember a {
+	float: none;
+	display: block;
+  }
+
+  .mobile-app .page-link {
+	padding: 10px;
+  }
+
+  .mobile-app .notification-list.friend-requests .notification-icon {
+	float: none;
+	display: block;
+	margin-top: 10px;
+  }
+
+}
+
+@media (max-width: 460px) {
+  .mobile-app .notification-list .notification-event {
+	width: 50%;
+  }
+}

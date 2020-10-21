@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+	<title>[[${front.title + '-' + front.subTitle}]]</title>
+
+	<!-- Required meta tags always come first -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+	<!-- Main Font -->
+    <script src="front/js/libs/webfontloader.min.js"></script>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap-reboot.css">
+	<link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap-grid.css">
+
+	<!-- Main Styles CSS -->
+	<link rel="stylesheet" type="text/css" href="front/css/main.css">
+	<link rel="stylesheet" type="text/css" href="common/font-awesome-4.7.0/css/font-awesome.min.css">
+
+	<!--文章标签云-->
+	<style>
+		.tag-cloud {
+			font-size: 10px;
+			display: inline-block;
+			color: #515365;
+			background: #e6ecf5;
+			border-radius: 5px;
+			padding: 5px;
+			margin: 1px;
+		}
+
+		.like-active {
+			background-color: #ff5e3a !important;
+		}
+
+		.like-active-icon {
+			fill: #ff5e3a;
+		}
+
+		.bigimg {
+			width: 600px;
+			position: fixed;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			margin: auto;
+			display: none;
+			z-index: 9999;
+			border: 10px solid #fff;
+		}
+		.line-limit-length {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+		}
+		.mask {
+			position: fixed;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #000;
+			opacity: 0.5;
+			filter: Alpha(opacity=50);
+			z-index: 98;
+			transition: all 1s;
+			display: none
+		}
+	</style>
+</head>
+<body>
+
+<!-- Preloader -->
+
+<div id="hellopreloader">
+	<div class="preloader">
+		<svg width="45" height="45" stroke="#fff">
+			<g fill="none" fill-rule="evenodd" stroke-width="2" transform="translate(1 1)">
+				<circle cx="22" cy="22" r="6" stroke="none">
+					<animate attributeName="r" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="6;22"/>
+					<animate attributeName="stroke-opacity" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="1;0"/>
+					<animate attributeName="stroke-width" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="2;0"/>
+				</circle>
+				<circle cx="22" cy="22" r="6" stroke="none">
+					<animate attributeName="r" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="6;22"/>
+					<animate attributeName="stroke-opacity" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="1;0"/>
+					<animate attributeName="stroke-width" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="2;0"/>
+				</circle>
+				<circle cx="22" cy="22" r="8">
+					<animate attributeName="r" begin="0s" calcMode="linear" dur="1.5s" repeatCount="indefinite" values="6;1;2;3;4;5;6"/>
+				</circle>
+			</g>
+		</svg>
+
+		<div class="text">Loading ...</div>
+	</div>
+</div>
+
+<div class="header-spacer-small"></div>
+<!-- Top Header-Profile -->
+
+<div class="container">
+	<div class="row">
+		<div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+			<div class="ui-block">
+				<div class="top-header">
+					<div class="top-header-thumb">
+						<img style="width: 100%;height: 400px" th:src="${front.background}">
+					</div>
+					<div class="profile-section">
+						<div class="row">
+							<div class="col col-lg-5 col-md-5 col-sm-12 col-12">
+								<ul class="profile-menu">
+									<li th:each="menu:${leftMenus}">
+										<a th:href="@{${menu.url}}" th:text="${menu.name}" target="_blank"></a>
+									</li>
+								</ul>
+							</div>
+							<div class="col col-lg-5 ml-auto col-md-5 col-sm-12 col-12">
+								<ul class="profile-menu">
+									<li th:each="menu:${rightMenus}">
+										<a th:href="@{${menu.url}}" th:text="${menu.name}" target="_blank"></a>
+									</li>
+									<li th:if="${session.admin != null}">
+										<a href="dashboard" target="_blank">后台管理</a>
+									</li>
+									<li th:if="${session.admin != null}">
+										<a href="edit" target="_blank">写文章</a>
+									</li>
+									<li th:if="${session.admin != null}">
+										<a href="comments" target="_blank">评论</a>
+									</li>
+									<li th:if="${session.admin == null}">
+										<a href="admin-login" target="_blank">登录后台</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="control-block-button">
+
+							<div class="btn btn-control bg-primary more">
+								<img src="https://gitee.com/cn_moti/moti-img/raw/master/2020-10-06/57d8d5912f734ee7b7b5d967140add3f.png" class="author-thumb" alt="">
+								<ul class="more-dropdown more-with-triangle triangle-bottom-right">
+									<li>
+										<a href="#">QQ：[[${user.qq}]]</a>
+									</li>
+								</ul>
+							</div>
+							<div class="btn btn-control bg-purple more">
+								<img src="https://gitee.com/cn_moti/moti-img/raw/master/2020-10-06/0a6296556d5c41788eddb1f44b9f6824.png" class="author-thumb" alt="">
+								<ul class="more-dropdown more-with-triangle triangle-bottom-right">
+									<li>
+										<a href="#">微信</a>
+									</li>
+									<li>
+										<img style="width: 150px;height: 150px" th:src="${user.wechat}" alt="">
+									</li>
+								</ul>
+							</div>
+							<div class="btn btn-control bg-blue more">
+								<img src="https://gitee.com/cn_moti/moti-img/raw/master/2020-10-06/0a6296556d5c41788eddb1f44b9f6824.png" class="author-thumb" alt="">
+								<ul class="more-dropdown more-with-triangle triangle-bottom-right">
+									<li>
+										<a href="#">微信公众号</a>
+									</li>
+									<li>
+										<img style="width: 150px;height: 150px" th:src="${user.publicWechat}" alt="">
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="top-header-author">
+						<a href="" class="author-thumb">
+							<img th:src="${user.img}" width="100%" alt="author">
+						</a>
+						<div class="author-content">
+							<a href="/moti-blog" class="h4 author-name" th:text="${front.title}"></a>
+							<div class="country" th:text="${front.subTitle}"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ... end Top Header-Profile -->
+<div class="container">
+	<div class="row">
+
+		<!-- Main Content -->
+
+		<div class="col col-xl-8 order-xl-2 col-lg-12 order-lg-1 col-md-12 col-sm-12 col-12">
+			<div class="row" id="articles">
+				<div th:each="article:${articles}" class="col col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<!--文章-->
+					<div class="ui-block">
+
+						<!-- Post -->
+
+						<article class="hentry blog-post">
+
+							<div class="post-thumb">
+								<a th:href="@{article(id=${article.id})}">
+									<img th:if="${article.img != null}" style="width: 100%;height: 300px" th:src="${article.img}" src="https://gitee.com/cn_moti/moti-img/raw/master/other/4b168f24b88b426a9edeb9fe96e171a1.png" alt="photo">
+									<img th:if="${article.img == null}" style="width: 100%;height: 300px" src="https://gitee.com/cn_moti/moti-img/raw/master/other/1a01632ad1654c14b1a7e769a8600b62.jpg" alt="photo">
+								</a>
+							</div>
+
+							<div class="post-content">
+								<a th:href="@{search(tagId=${tag.id})}" style="margin: 0px 4px 2px 0px" class="post-category bg-blue-light" th:each="tag:${article.tags}">[[${tag.name}]]</a>
+
+								<a th:href="@{article(id=${article.id})}" class="h4 post-title" th:text="${article.title}"></a>
+								<p th:if="${article.introduce != null}">
+									摘要: [(${article.introduce})] ...»<a style="color: cornflowerblue" th:href="@{article(id=${article.id})}">阅读原文</a>
+								</p>
+
+								<div class="author-date">
+									<div class="post__date">
+										<time class="published" datetime="2017-03-24T18:18" th:text="${'发布于' + #dates.format(article.publishTime,'yyyy年MM月dd日 HH:mm:ss')}">
+										</time>
+									</div>
+								</div>
+
+								<div class="post-additional-info inline-items">
+									<div class="friends-harmonic-wrap">
+										<div th:if="${article.comment != null}" class="names-people-likes">
+											 评论：[[${article.comment}]]
+										</div>
+										<div th:if="${article.comment == null}" class="names-people-likes">
+											 评论：0
+										</div>
+									</div>
+
+									<div class="comments-shared">
+										<span>阅读：[[${article.readCount}]]</span>
+									</div>
+
+								</div>
+							</div>
+
+						</article>
+
+						<!-- ... end Post -->
+					</div>
+				</div>
+			</div>
+			<nav aria-label="Page navigation">
+				<ul class="pagination justify-content-center">
+					<li class="page-item" th:if="${page != 1}">
+						<a class="page-link" href="index?page=1" tabindex="-1">第一页</a>
+					</li>
+					<li class="page-item"><a class="page-link" th:href="@{index(page=${page -1})}" th:if="${page > 2}">[[${page-1}]]</a></li>
+					<li class="page-item active"><a class="page-link" href="javaScript:Void(0)">[[${page}]]</a></li>
+					<li class="page-item"><a class="page-link" th:href="@{index(page=${page +1})}" th:if="${page < (totalPage -1)}">[[${page + 1}]]</a></li>
+
+					<li class="page-item" th:if="${page != totalPage}">
+						<a class="page-link" th:href="@{index(page=${totalPage})}">最后一页</a>
+					</li>
+					<li class="page-item disabled">
+						<a class="page-link" href="#" tabindex="-1">共：[[${totalPage}]]页</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+
+		<!-- ... end Main Content -->
+
+		<!-- Right Sidebar -->
+
+		<div class="col col-xl-4 order-xl-2 col-lg-12 order-lg-1 col-md-12 col-sm-12 col-12">
+
+			<!--天气-->
+			<div class="ui-block">
+				<div class="widget w-wethear">
+
+					<div class="wethear-now inline-items">
+						<div class="temperature-sensor"><span id="tody_main"></span></div>
+						<div class="max-min-temperature">
+							<span id="min_tem"></span>
+							<span id="max_tem"></span>
+						</div>
+						<svg class="olymp-weather-partly-sunny-icon" id="today"></svg>
+					</div>
+
+					<div class="wethear-now-description">
+						<div class="climate"></div>
+						<span>空气质量: <span id="air_level"></span></span>
+						<span>湿度: <span id="humidity"></span></span>
+					</div>
+
+					<ul class="weekly-forecast">
+						<li>
+							<div class="day" id="day_1"></div>
+							<svg class="olymp-weather-sunny-icon" id="day_img1"></svg>
+							<div class="temperature-sensor-day" id="day_tem1">60°</div>
+						</li>
+
+						<li>
+							<div class="day" id="day_2"></div>
+							<svg class="olymp-weather-partly-sunny-icon" id="day_img2"></svg>
+							<div class="temperature-sensor-day" id="day_tem2">58°</div>
+						</li>
+
+						<li>
+							<div class="day" id="day_3"></div>
+							<svg class="olymp-weather-cloudy-icon" id="day_img3"></svg>
+							<div class="temperature-sensor-day" id="day_tem3">67°</div>
+						</li>
+
+						<li>
+							<div class="day" id="day_4"></div>
+							<svg class="olymp-weather-rain-icon" id="day_img4"></svg>
+
+							<div class="temperature-sensor-day" id="day_tem4">70°</div>
+						</li>
+
+						<li>
+							<div class="day" id="day_5"></div>
+							<svg class="olymp-weather-storm-icon" id="day_img5">
+
+							</svg>
+
+							<div class="temperature-sensor-day" id="day_tem5">58°</div>
+						</li>
+
+						<li>
+							<div class="day" id="day_6"></div>
+							<svg class="olymp-weather-snow-icon" id="day_img6">
+							</svg>
+							<div class="temperature-sensor-day" id="day_tem6">68°</div>
+						</li>
+
+						<li>
+							<div class="day" id="day_7"></div>
+							<svg class="olymp-weather-wind-icon-header" id="day_img7"></svg>
+							<div class="temperature-sensor-day" id="day_tem7"></div>
+						</li>
+					</ul>
+					<div class="date-and-place">
+						<h5 class="date"><span id="week"></span>, <span id="date_1"></span></span></h5>
+						<div class="place"></div>
+					</div>
+				</div>
+			</div>
+
+			<!--搜索-->
+			<div class="ui-block">
+				<div class="ui-block-content">
+					<form action="search" method="get" onsubmit="return checkSearch()">
+						<from class="w-search">
+							<div class="form-group with-button">
+								<input id="search" autocomplete="off" class="form-control" name="content" type="text" placeholder="输入关键词进行站内搜索">
+								<button>
+									<svg class="olymp-magnifying-glass-icon">
+										<use xlink:href="front/svg-icons/sprites/icons.svg#olymp-magnifying-glass-icon"></use></svg>
+								</button>
+							</div>
+						</from>
+					</form>
+				</div>
+			</div>
+
+			<!--公告-->
+			<div class="ui-block">
+				<div class="ui-block-title">
+					<h6 class="title">公告</h6>
+				</div>
+				<div class="ui-block-content">
+					<div class="text" style="text-indent: 1em;font-size: 14px" th:text="${front.notice}">
+
+					</div>
+					<hr>
+					<div><a th:if="${front.noticeImg != null}" th:href="@{${front.imgTarget}}"><img style="width: 100%" th:src="${front.noticeImg}" alt=""></a></div>
+				</div>
+			</div>
+
+			<!--热门文章-->
+			<div class="ui-block">
+				<div class="ui-block-title">
+					<h6 class="title">热门文章</h6>
+				</div>
+				<div class="ui-block-content">
+
+					<!-- W-Personal-Info -->
+
+					<ul class="widget w-personal-info item-block">
+						<li th:each="article:${famousArticles}" style="margin-top: -20px">
+							<a th:href="@{article(id=${article.id})}" style="font-weight: 300" class="h6" th:text="${'《'+article.title + '》-' + article.readCount + '次阅读'}"></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!--标签云-->
+			<div class="ui-block">
+				<div class="ui-block-title">
+					<h6 class="title">标签云</h6>
+				</div>
+				<div class="ui-block-content">
+					<a th:if="${tag.articleCount >= 6 and tag.articleCount < 9}" th:each="tag:${tags}"
+					   th:text="${tag.name + '('+tag.articleCount+')'}"
+					   style="font-size: 18px"
+					   class="tag-cloud" th:href="@{search(tagId=${tag.id})}"></a>
+					<a th:if="${tag.articleCount >= 3 and tag.articleCount < 6}" th:each="tag:${tags}"
+					   th:text="${tag.name + '('+tag.articleCount+')'}"
+					   style="font-size: 14px"
+					   class="tag-cloud" th:href="@{search(tagId=${tag.id})}"></a>
+					<a th:if="${tag.articleCount > 0 and tag.articleCount < 3}" th:each="tag:${tags}"
+					   th:text="${tag.name + '('+tag.articleCount+')'}"
+					   style="font-size: 10px"
+					   class="tag-cloud" th:href="@{search(tagId=${tag.id})}"></a>
+				</div>
+			</div>
+
+			<!--文集-->
+			<div class="ui-block">
+				<div class="ui-block-title">
+					<h6 class="title">文集</h6>
+				</div>
+				<div class="ui-block-content">
+					<ul class="widget w-personal-info item-block">
+						<li th:each="kind:${kinds}" style="margin-top: -20px;padding: 15px 10px;">
+							<a th:href="@{search(kindId=${kind.id})}" style="font-weight: 300" class="h6"
+							   th:text="${kind.name}"></a>
+							<span class="float-right" th:text="${kind.articleCount + '篇'}"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!--文章归档-->
+			<div class="ui-block">
+				<div class="ui-block-title">
+					<h6 class="title">文章归档</h6>
+				</div>
+				<div class="ui-block-content">
+					<ul class="widget w-personal-info item-block">
+						<li th:each="archive:${archives}" style="margin-top: -20px;padding: 15px 10px;">
+							<a th:href="@{search(date=${archive.date})}" style="font-weight: 300" class="h6" th:text="${archive.date}"></a>
+							<span class="float-right" th:text="${archive.count + '篇'}"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!--友情链接-->
+			<div class="ui-block">
+				<div class="ui-block-title">
+					<h6 class="title">友情链接</h6>
+				</div>
+				<div class="ui-block-content">
+					<ul class="widget w-personal-info item-block">
+						<li style="margin-top: -20px" th:each="link:${links}">
+							<a th:href="@{${link.url}}" target="_blank" style="font-weight: 300" class="h6" th:text="${link.name}"></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!--友情链接-->
+			<div class="ui-block">
+				<div class="ui-block-title">
+					<h6 class="title">访问统计</h6>
+				</div>
+				<div class="ui-block-content">
+					<ul class="widget w-personal-info item-block">
+						<li style="margin-top: -20px">
+							昨日访问：
+							<span class="float-right">1</span>
+						</li>
+						<li style="margin-top: -20px">
+							昨日访客：
+							<span class="float-right">1</span>
+						</li>
+						<li style="margin-top: -20px">
+							总计访问：
+							<span class="float-right">1</span>
+						</li>
+						<li style="margin-top: -20px">
+							总计访客：
+							<span class="float-right">1</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- ... end Right Sidebar -->
+
+	</div>
+</div>
+
+<!-- ... end Window-popup-CHAT for responsive min-width: 768px -->
+<a class="back-to-top" href="#" id="back-top" style="display: none">
+	<img src="front/svg-icons/back-to-top.svg" alt="arrow" class="back-icon">
+</a>
+
+<!-- JS Scripts -->
+<script src="common/js/jquery-3.4.1.js"></script>
+<script src="front/js/libs/jquery.appear.js"></script>
+<script src="front/js/libs/jquery.mousewheel.js"></script>
+<script src="front/js/libs/perfect-scrollbar.js"></script>
+<script src="front/js/libs/jquery.matchHeight.js"></script>
+<script src="front/js/libs/svgxuse.js"></script>
+<script src="front/js/libs/imagesloaded.pkgd.js"></script>
+<script src="front/js/libs/Headroom.js"></script>
+<script src="front/js/libs/velocity.js"></script>
+<script src="front/js/libs/ScrollMagic.js"></script>
+<script src="front/js/libs/jquery.waypoints.js"></script>
+<script src="front/js/libs/jquery.countTo.js"></script>
+<script src="front/js/libs/material.min.js"></script>
+<script src="front/js/libs/bootstrap-select.js"></script>
+<script src="front/js/libs/smooth-scroll.js"></script>
+<script src="front/js/libs/selectize.js"></script>
+<script src="front/js/libs/moment.js"></script>
+<script src="front/js/libs/daterangepicker.js"></script>
+<script src="front/js/libs/fullcalendar.js"></script>
+<script src="front/js/libs/isotope.pkgd.js"></script>
+<script src="front/js/libs/ajax-pagination.js"></script>
+<script src="front/js/libs/Chart.js"></script>
+<script src="front/js/libs/chartjs-plugin-deferred.js"></script>
+<script src="front/js/libs/circle-progress.js"></script>
+<script src="front/js/libs/loader.js"></script>
+<script src="front/js/libs/run-chart.js"></script>
+<script src="front/js/libs/jquery.magnific-popup.js"></script>
+<script src="front/js/libs/jquery.gifplayer.js"></script>
+<script src="front/js/libs/ion.rangeSlider.js"></script>
+
+<script src="front/js/main.js"></script>
+<script src="front/js/libs-init/libs-init.js"></script>
+<script defer src="front/fonts/fontawesome-all.js"></script>
+<script src="common/js/sweetalert.min.js"></script>
+
+
+<script src="front/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=a732d71d8cacb92702aa8ea4203e353c&plugin=AMap.CitySearch">
+</script>
+<script>
+
+	function checkSearch() {
+		let search = $('#search').val().trim();
+		if (search == ''){
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 天气
+	 */
+	var code;
+
+	function showCityInfo() {
+		//实例化城市查询类
+		var citysearch = new AMap.CitySearch();
+		//自动获取用户IP，返回当前城市
+		citysearch.getLocalCity(function (status, result) {
+			if (status === 'complete' && result.info === 'OK') {
+				if (result && result.city && result.bounds) {
+					var adcode = result.adcode;
+					code = adcode;
+				}
+			} else {
+				//天气查询失败
+			}
+		});
+	}
+
+	showCityInfo();
+
+	function judgeImg(status, imgId) {
+		if ((status.search('晴') != -1)) {
+			$(imgId).html('<use xlink:href=\"front/svg-icons/sprites/icons-weather.svg#olymp-weather-sunny-icon\"></use>');
+		} else if (status.search('云') != -1) {
+			$(imgId).html('<use xlink:href=\"front/svg-icons/sprites/icons-weather.svg#olymp-weather-partly-sunny-icon\"></use>');
+		} else if (status.search('雨') != -1) {
+			$(imgId).html('<use xlink:href=\"front/svg-icons/sprites/icons-weather.svg#olymp-weather-rain-icon\"></use>');
+		} else if (status.search('阴') != -1) {
+			$(imgId).html('<use xlink:href=\"front/svg-icons/sprites/icons-weather.svg#olymp-weather-cloudy-icon\"></use>');
+		}
+	}
+
+	$.ajax({
+		type: 'GET',
+		url: 'https://tianqiapi.com/api',
+		data: 'version=v1&cityid=' + code + '&appid=26161536&appsecret=2LkFkDWJ',
+		dataType: 'JSON',
+		error: function () {
+			alert('网络错误');
+		},
+		success: function (res) {
+			$('#min_tem').html(res.data[0].tem2);
+			$('#max_tem').html(res.data[0].tem1);
+			$('#tody_main').html(parseInt(res.data[0].tem2) + (parseInt(res.data[0].tem1) - parseInt(res.data[0].tem2)) / 2);
+			$(".climate").html(res.data[0].wea);
+			$("#air_level").html(res.data[0].air_level);
+			$("#humidity").html(res.data[0].humidity);
+			judgeImg(res.data[0].wea, "#today");
+			$("#week").html(res.data[0].week);
+			$("#date_1").html(res.data[0].date);
+			$(".place").html(res.city);
+			for (var i = 1; i < res.data.length; i++) {
+				var temp_day = "#day_" + i + "";
+				var temp_day_tem = "#day_tem" + i + "";
+				var day_img = "#day_img" + i + "";
+				$(temp_day).html(res.data[i].week);
+				$(temp_day_tem).html(res.data[i].tem);
+				judgeImg(res.data[i].wea, day_img);
+
+			}
+		}
+	});
+</script>
+</body>
+</html>

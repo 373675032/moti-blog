@@ -1,0 +1,133 @@
+.tabco1 {
+	background: #fff;
+	padding: 10px !important;
+}
+th.tabco1 {
+	background: #fff;
+	padding: 32px 10px !important;
+	font-size: 18px;
+	text-transform: uppercase;
+	color: #000;
+	vertical-align: middle !important;
+}
+.tabco2 {
+	background: #009688;
+	text-align: center;
+	color: #fff;
+}
+th.tabco2 {
+	background: #50cc83;
+	padding: 20px 5px !important;
+	font-size: 18px;
+	text-transform: uppercase;
+	vertical-align: middle !important;
+}
+.tabco3 {
+	background: #03A9F4;
+	text-align: center;
+	color: #fff;
+}
+th.tabco3 {
+	background: #039BE5;
+	padding: 20px 10px !important;
+	font-size: 18px;
+	text-transform: uppercase;
+	vertical-align: middle !important;
+}
+.tabco4 {
+	background: #EF5350;
+	text-align: center;
+	color: #fff;
+}
+th.tabco4 {
+	background: #E53935;	
+	padding: 20px 10px !important;
+	font-size: 18px;
+	text-transform: uppercase;
+	vertical-align: middle !important;
+}
+.rightSign {
+	color: #1ab921;
+	background: #fff;
+	border-radius: 45px;
+	padding: 5px;
+	border: 2px solid;
+}
+.crossSign {
+	color: #de2315;
+	background: #fff;
+	border-radius: 45px;
+	padding: 5px 7px;
+	border: 2px solid;
+}
+
+
+
+
+/* =================================
+Style for Pricing Table Example 2
+================================= */ 
+.price-table {
+	background: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	border: 7px solid #eeeeee;
+	-moz-transition: all .3s ease;
+	-o-transition: all .3s ease;
+	-webkit-transition: all .3s ease;
+}
+.price-table:hover {
+	background: rgba(0,0,0, .03);
+	border-color: #0093DD;
+}
+.price-table .price-table-heading {
+	color: #333333;
+	background: #f9f9f9;
+	padding: 10px 0;
+	margin: 0;
+}
+.price-table .price-table-heading .title {
+	color: #333333;
+	font-weight: 900;
+	letter-spacing: 1px;
+}
+.price-table > .price-table-body {
+	color: #FFFFFF;
+	background: #0093DD;
+	padding: 50px 0 30px;
+	-moz-transition: all .3s ease;
+	-o-transition: all .3s ease;
+	-webkit-transition: all .3s ease;
+}
+.price-table > .price-table-body .value {
+	font-size: 66px;
+	font-weight: 300;
+	color: #FFFFFF;
+	padding: 0;
+}
+.price-table > .price-table-body .value small {
+	font-size: 16px;
+}
+.price-table > .list-group {
+	color: #333;
+	font-weight: 400;
+	margin-bottom: 0;
+}
+.price-table > .list-group .list-group-item {
+	color: #333;
+	font-weight: 400;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;	
+}
+.price-table .btn {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	font-weight: 700;
+}
+.price-table-footer {
+	background: #eeeeee;
+	padding: 15px 0;
+}

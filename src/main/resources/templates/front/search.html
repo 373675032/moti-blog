@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+	<title>搜索 - [[${user.name}]]的博客</title>
+
+	<!-- Required meta tags always come first -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+	<!-- Main Font -->
+    <script src="front/js/libs/webfontloader.min.js"></script>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap-reboot.css">
+	<link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap-grid.css">
+
+	<!-- Main Styles CSS -->
+	<link rel="stylesheet" type="text/css" href="front/css/main.css">
+	<link rel="stylesheet" type="text/css" href="common/font-awesome-4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+
+<!-- Preloader -->
+
+<div id="hellopreloader">
+	<div class="preloader">
+		<svg width="45" height="45" stroke="#fff">
+			<g fill="none" fill-rule="evenodd" stroke-width="2" transform="translate(1 1)">
+				<circle cx="22" cy="22" r="6" stroke="none">
+					<animate attributeName="r" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="6;22"/>
+					<animate attributeName="stroke-opacity" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="1;0"/>
+					<animate attributeName="stroke-width" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="2;0"/>
+				</circle>
+				<circle cx="22" cy="22" r="6" stroke="none">
+					<animate attributeName="r" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="6;22"/>
+					<animate attributeName="stroke-opacity" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="1;0"/>
+					<animate attributeName="stroke-width" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="2;0"/>
+				</circle>
+				<circle cx="22" cy="22" r="8">
+					<animate attributeName="r" begin="0s" calcMode="linear" dur="1.5s" repeatCount="indefinite" values="6;1;2;3;4;5;6"/>
+				</circle>
+			</g>
+		</svg>
+
+		<div class="text">Loading ...</div>
+	</div>
+</div>
+
+<div class="header-spacer-small"></div>
+<!-- Top Header-Profile -->
+
+<div class="container">
+	<div class="row">
+		<div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+			<div class="ui-block">
+				<div class="ui-block-title inline-items">
+					<div class="btn btn-control btn-control-small bg-yellow">
+						<svg class="olymp-trophy-icon"><use xlink:href="#olymp-trophy-icon"></use></svg>
+						<div class="ripple-container">
+							❓
+						</div>
+					</div>
+
+					<h4 class="title">搜索【
+						<span th:if="${content != null}" th:text="${content}"></span>
+						<span th:if="${tag != null}" th:text="${'标签：' + tag.name}"></span>
+						<span th:if="${kind != null}" th:text="${'文集：' + kind.name}"></span>
+						<span th:if="${date != null}" th:text="${'归档：' + date}"></span>
+						】的结果( 共 [[${articles.size()}]] 条 )</h4>
+					<div class="block-btn align-right">
+						<a href="index" class="btn btn-primary btn-md-4">返回首页</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ... end Top Header-Profile -->
+<div class="container">
+
+	<div class="row" th:if="${tag != null or kind != null}">
+		<div class="col col-xl-4 order-xl-4 col-lg-4 order-lg-4 col-md-4 col-sm-4 col-4">
+			<article class="hentry blog-post blog-post-v3 featured-post-item">
+				<div class="post-thumb" th:if="${kind != null}">
+					<img src="https://gitee.com/cn_moti/moti-img/raw/master/other/6e1aceb77d1e4b5e91e390fd9e136bd7.jpg" th:if="${kind.img == null}" alt="photo">
+					<img th:src="${kind.img}" th:if="${kind.img != null}" alt="photo">
+
+					<a href="#" class="post-category bg-purple">《[[${kind.name}]]》：[[${kind.introduce}]]</a>
+				</div>
+				<div class="post-thumb" th:if="${tag != null}">
+					<img src="https://gitee.com/cn_moti/moti-img/raw/master/other/6e1aceb77d1e4b5e91e390fd9e136bd7.jpg" th:if="${tag.img == null}" alt="photo">
+					<img th:src="${tag.img}" th:if="${tag.img != null}" alt="photo">
+					<a href="#" class="post-category bg-purple">《[[${tag.name}]]》：[[${tag.introduce}]]</a>
+				</div>
+			</article>
+		</div>
+
+		<div class="col col-xl-8 order-xl-2 col-lg-8 order-lg-1 col-md-12 col-sm-8 col-8">
+			<div class="row" id="articles">
+				<div th:each="article:${articles}" class="col col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<!--文章-->
+					<div class="ui-block">
+
+						<!-- Post -->
+
+						<article class="hentry blog-post">
+
+							<div class="post-content">
+
+								<a th:href="@{article(id=${article.id})}" class="h4 post-title">[(${article.title})]</a>
+								<a th:href="@{article(id=${article.id})}" style="color: rgb(136, 141, 168)" th:if="${article.introduce != null}">
+									摘要: [(${article.introduce})] ...»<a style="color: cornflowerblue" th:href="@{article(id=${article.id})}">阅读原文</a>
+								</a><br>
+
+
+								<br>
+								<a th:href="@{search(tagId=${tag.id})}" style="margin: 0px 4px 2px 0px" class="post-category bg-blue-light" th:each="tag:${article.tags}">[[${tag.name}]]</a>
+
+								<div class="post-additional-info inline-items">
+									<div class="friends-harmonic-wrap">
+										<div th:if="${article.comment != null}" class="names-people-likes">
+											评论：[[${article.comment}]]
+										</div>
+										<div th:if="${article.comment == null}" class="names-people-likes">
+											评论：0
+										</div>
+										<div style="padding-left: 10px" class="names-people-likes">
+											阅读：[[${article.readCount}]]
+										</div>
+									</div>
+
+									<div class="comments-shared">
+										<div class="post__date">
+											<time class="published" datetime="2017-03-24T18:18" th:text="${'发布于' + #dates.format(article.publishTime,'yyyy年MM月dd日 HH:mm:ss')}">
+											</time>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</article>
+
+						<!-- ... end Post -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="row" th:if="${tag == null and kind == null}">
+
+		<!-- Main Content -->
+
+		<div class="col col-xl-12 order-xl-2 col-lg-12 order-lg-1 col-md-12 col-sm-12 col-12">
+			<div class="row" id="articles">
+				<div th:each="article:${articles}" class="col col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+					<!--文章-->
+					<div class="ui-block">
+
+						<!-- Post -->
+
+						<article class="hentry blog-post">
+
+							<div class="post-content">
+
+								<a th:href="@{article(id=${article.id})}" class="h4 post-title">[(${article.title})]</a>
+								<a th:href="@{article(id=${article.id})}" style="color: rgb(136, 141, 168)" th:if="${article.introduce != null}">
+									摘要: [(${article.introduce})] ...»<a style="color: cornflowerblue" th:href="@{article(id=${article.id})}">阅读原文</a>
+								</a><br>
+
+
+								<br>
+								<a th:href="@{search(tagId=${tag.id})}" style="margin: 0px 4px 2px 0px" class="post-category bg-blue-light" th:each="tag:${article.tags}">[[${tag.name}]]</a>
+
+								<div class="post-additional-info inline-items">
+									<div class="friends-harmonic-wrap">
+										<div th:if="${article.comment != null}" class="names-people-likes">
+											 评论：[[${article.comment}]]
+										</div>
+										<div th:if="${article.comment == null}" class="names-people-likes">
+											 评论：0
+										</div>
+										<div style="padding-left: 10px" class="names-people-likes">
+											 阅读：[[${article.readCount}]]
+										</div>
+									</div>
+
+									<div class="comments-shared">
+										<div class="post__date">
+											<time class="published" datetime="2017-03-24T18:18" th:text="${'发布于' + #dates.format(article.publishTime,'yyyy年MM月dd日 HH:mm:ss')}">
+											</time>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</article>
+
+						<!-- ... end Post -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ... end Main Content -->
+
+	</div>
+</div>
+
+<!-- ... end Window-popup-CHAT for responsive min-width: 768px -->
+<a class="back-to-top" href="#" id="back-top" style="display: none">
+	<img src="front/svg-icons/back-to-top.svg" alt="arrow" class="back-icon">
+</a>
+
+<!-- JS Scripts -->
+<script src="common/js/jquery-3.4.1.js"></script>
+<script src="front/js/libs/jquery.appear.js"></script>
+<script src="front/js/libs/jquery.mousewheel.js"></script>
+<script src="front/js/libs/perfect-scrollbar.js"></script>
+<script src="front/js/libs/jquery.matchHeight.js"></script>
+<script src="front/js/libs/svgxuse.js"></script>
+<script src="front/js/libs/imagesloaded.pkgd.js"></script>
+<script src="front/js/libs/Headroom.js"></script>
+<script src="front/js/libs/velocity.js"></script>
+<script src="front/js/libs/ScrollMagic.js"></script>
+<script src="front/js/libs/jquery.waypoints.js"></script>
+<script src="front/js/libs/jquery.countTo.js"></script>
+<script src="front/js/libs/popper.min.js"></script>
+<script src="front/js/libs/material.min.js"></script>
+<script src="front/js/libs/bootstrap-select.js"></script>
+<script src="front/js/libs/smooth-scroll.js"></script>
+<script src="front/js/libs/selectize.js"></script>
+<script src="front/js/libs/swiper.jquery.js"></script>
+<script src="front/js/libs/moment.js"></script>
+<script src="front/js/libs/daterangepicker.js"></script>
+<script src="front/js/libs/fullcalendar.js"></script>
+<script src="front/js/libs/isotope.pkgd.js"></script>
+<script src="front/js/libs/ajax-pagination.js"></script>
+<script src="front/js/libs/Chart.js"></script>
+<script src="front/js/libs/chartjs-plugin-deferred.js"></script>
+<script src="front/js/libs/circle-progress.js"></script>
+<script src="front/js/libs/loader.js"></script>
+<script src="front/js/libs/run-chart.js"></script>
+<script src="front/js/libs/jquery.magnific-popup.js"></script>
+<script src="front/js/libs/jquery.gifplayer.js"></script>
+<script src="front/js/libs/mediaelement-and-player.js"></script>
+<script src="front/js/libs/mediaelement-playlist-plugin.min.js"></script>
+<script src="front/js/libs/sticky-sidebar.js"></script>
+<script src="front/js/libs/ion.rangeSlider.js"></script>
+
+<script src="front/js/main.js"></script>
+<script src="front/js/libs-init/libs-init.js"></script>
+<script defer src="front/fonts/fontawesome-all.js"></script>
+<script src="common/js/sweetalert.min.js"></script>
+
+<script src="front/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+</html>

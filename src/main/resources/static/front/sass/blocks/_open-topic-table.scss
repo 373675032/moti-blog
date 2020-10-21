@@ -1,0 +1,95 @@
+/*------------- #OPEN-TOPIC-TABLE --------------*/
+
+
+
+.open-topic-table {
+	width: 100%;
+
+  thead {
+	background-color: $blue;
+
+	th {
+	  font-size: 12px;
+	  font-weight: 700;
+	  padding: 15px 25px;
+	  color: $white-color;
+
+	  &.author {
+		text-align: left;
+	  }
+	}
+  }
+
+  td {
+	padding: 35px 25px;
+  }
+
+  tr {
+	border-bottom: 1px solid $border-color;
+	border-top: 1px solid $border-color;
+
+	&:last-child {
+	  border-bottom: none;
+	}
+  }
+
+  .topic-date {
+	padding: 10px 23px;
+	background-color: $smoke-light;
+	font-size: 11px;
+  }
+
+  .author {
+	text-align: center;
+  }
+
+  .author-thumb {
+	margin-bottom: 20px;
+
+	img {
+	  display: block;
+	  width: 80px;
+	  height: 80px;
+	}
+  }
+
+  .author-name {
+	display: block;
+	white-space: nowrap;
+
+	&:hover {
+	  color: $primary-color;
+	}
+  }
+
+  .country {
+	font-size: 11px;
+  }
+
+  .posts {
+	vertical-align: top;
+  }
+}
+
+.reply-topic {
+  float: right;
+  color: $primary-color;
+  font-size: 11px;
+}
+
+
+/*------------- Responsive mode styles --------------*/
+
+
+@media (max-width: 640px) {
+
+  .open-topic-table thead th,
+  .open-topic-table td {
+	padding: 5px;
+  }
+
+  .open-topic-table .author-thumb img {
+	width: 40px;
+	height: 40px;
+  }
+}

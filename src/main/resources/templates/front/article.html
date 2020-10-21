@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>[[${article.title}]] - [[${user.name}]]的博客</title>
+
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap-reboot.css">
+    <link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="front/Bootstrap/dist/css/bootstrap-grid.css">
+
+    <!-- Main Styles CSS -->
+    <link rel="stylesheet" type="text/css" href="front/css/main.css">
+    <link rel="stylesheet" type="text/css" href="front/css/fonts.min.css">
+
+
+    <!--引入Jquery-->
+    <script src="common/js/jquery-3.4.1.js"></script>
+    <!--引入MarkDown-->
+    <link rel="stylesheet" type="text/css" href="background/EditorMD/css/editormd.preview.css" />
+    <script type="text/javascript" src="background/EditorMD/lib/marked.min.js"></script>
+    <script type="text/javascript" src="background/EditorMD/lib/prettify.min.js"></script>
+    <script type="text/javascript" src="background/EditorMD/lib/raphael.min.js"></script>
+    <script type="text/javascript" src="background/EditorMD/lib/underscore.min.js"></script>
+    <script type="text/javascript" src="background/EditorMD/lib/sequence-diagram.min.js"></script>
+    <script type="text/javascript" src="background/EditorMD/lib/flowchart.min.js"></script>
+    <script type="text/javascript" src="background/EditorMD/lib/jquery.flowchart.min.js"></script>
+    <script type="text/javascript" src="background/EditorMD/editormd.amd.min.js"></script>
+    <!-- Main Font -->
+    <script src="front/js/libs/webfontloader.min.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                families: ['Roboto:300,400,500,700:latin']
+            }
+        });
+    </script>
+    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(window).scroll(function () {
+            //浏览器的高度加上滚动条的高度
+            if ($(window).scrollTop() > 2000){
+                $('#back-top').show("fast");
+            }else {
+                $('#back-top').hide("fast");
+            }
+        });
+    </script>
+
+    <!--文章标签云-->
+    <style>
+        .tag-cloud {
+            font-size: 10px;
+            display: inline-block;
+            color: #515365;
+            background: #e6ecf5;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 1px;
+        }
+
+        .like-active {
+            background-color: #ff5e3a !important;
+        }
+
+        .like-active-icon {
+            fill: #ff5e3a;
+        }
+
+        .bigimg {
+            width: 600px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            display: none;
+            z-index: 9999;
+            border: 10px solid #fff;
+        }
+        .line-limit-length {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        .mask {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #000;
+            opacity: 0.5;
+            filter: Alpha(opacity=50);
+            z-index: 98;
+            transition: all 1s;
+            display: none
+        }
+    </style>
+
+</head>
+<body class="page-has-left-panels page-has-right-panels">
+
+
+<!-- Preloader -->
+
+<div id="hellopreloader">
+    <div class="preloader">
+        <svg width="45" height="45" stroke="#fff">
+            <g fill="none" fill-rule="evenodd" stroke-width="2" transform="translate(1 1)">
+                <circle cx="22" cy="22" r="6" stroke="none">
+                    <animate attributeName="r" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="6;22"/>
+                    <animate attributeName="stroke-opacity" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="1;0"/>
+                    <animate attributeName="stroke-width" begin="1.5s" calcMode="linear" dur="3s" repeatCount="indefinite" values="2;0"/>
+                </circle>
+                <circle cx="22" cy="22" r="6" stroke="none">
+                    <animate attributeName="r" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="6;22"/>
+                    <animate attributeName="stroke-opacity" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="1;0"/>
+                    <animate attributeName="stroke-width" begin="3s" calcMode="linear" dur="3s" repeatCount="indefinite" values="2;0"/>
+                </circle>
+                <circle cx="22" cy="22" r="8">
+                    <animate attributeName="r" begin="0s" calcMode="linear" dur="1.5s" repeatCount="indefinite" values="6;1;2;3;4;5;6"/>
+                </circle>
+            </g>
+        </svg>
+
+        <div class="text">Loading ...</div>
+    </div>
+</div>
+
+<!-- ... end Preloader -->
+
+<div class="container">
+    <div class="row mt50">
+
+        <div class="col col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="ui-block">
+
+                <!-- Single Post -->
+
+                <article class="hentry blog-post single-post single-post-v3">
+
+                    <a  th:href="@{search(kindId=${article.kinds.id})}" style="margin: 0px 4px 2px 0px;font-size: 15px" class="post-category bg-blue-light" th:if="${article.kinds != null}">选自文集 《[[${article.kinds.name}]]》</a>
+                    <a  href="#" style="margin: 0px 4px 2px 0px;font-size: 15px" class="post-category bg-blue-light" th:if="${article.kinds == null}">该文章没有添加到任何文集</a>
+
+                    <ul class="filter-icons" style="font-size: 14px">
+                        <li>
+                            阅读：
+                            <span th:text="${readCount}"></span>
+                        </li>
+                        <li>
+                            评论：
+                            <span th:text="${article.comment}"></span>
+                            <span th:if="${article.comment == null}">0</span>
+                        </li>
+                    </ul>
+
+                    <h1 class="post-title" style="font-size: 36px;margin-bottom: 15px" th:text="${article.title}"></h1>
+
+                    <div class="author-date" style="font-size: 14px">
+                        <div class="author-thumb">
+                            <a href="/moti-blog">
+                                <img alt="author" th:src="${user.img}" width="50px" class="avatar">
+                            </a>
+                        </div>
+                        <a class="h6 post__author-name fn" href="/moti-blog" style="font-size: 14px" th:text="${user.name}"></a>
+                        <div class="post__date">
+                            <time class="published" datetime="2017-03-24T18:18" th:text="${' - 发布于' + #dates.format(article.publishTime,'yyyy年MM月dd日 HH:mm:ss')}">
+                            </time>
+                            <a th:if="${session.admin != null}" th:href="@{edit(id=${article.id})}" style="margin-left: 10px">编辑</a>
+                        </div>
+                    </div>
+
+                    <div class="post-thumb" style="margin:30px -70px">
+                        <img th:src="${article.img}" alt="author">
+                    </div>
+
+                    <div class="post-content-wrap">
+                        <div id="doc-content" class="post-content" style="padding: 5px 0px 20px 0px">
+                            <textarea style="display:none;">[[${article.content}]]</textarea>
+                        </div>
+                        <script type="text/javascript">
+                            var testEditor;
+                            $(function () {
+                                testEditor = editormd.markdownToHTML("doc-content", {//注意：这里是上面DIV的id
+                                    htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                                    taskList        : true,
+                                    tex             : true,  // 默认不解析
+                                    flowChart       : true,  // 默认不解析
+                                    sequenceDiagram : true,  // 默认不解析
+                                });
+                            });
+                        </script>
+                    </div>
+
+                    <div class="choose-reaction reaction-colored">
+                        <div class="title" th:text="${'最后更新于' + #dates.format(article.recentEdit,'yyyy年MM月dd日 HH:mm:ss')}"></div>
+                        <a th:href="@{search(tagId=${tag.id})}" style="margin: 0px 4px 2px 0px" class="post-category bg-primary" th:each="tag:${article.tags}">[[${tag.name}]]</a>
+                    </div>
+                </article>
+
+                <!-- ... end Single Post -->
+
+                <!-- Comments -->
+
+                <ul class="comments-list">
+
+                    <li class="comment-item has-children" th:each="comment:${comments}">
+                        <div class="post__author author vcard inline-items">
+                            <img th:src="${comment.img}" alt="author">
+
+                            <div class="author-date">
+                                <a class="h6 post__author-name fn" th:text="${comment.name}"></a>
+                                <div class="post__date">
+                                    <time class="published" th:text="${#dates.format(comment.time,'yyyy年MM月dd日 HH:mm:ss')}"></time>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p th:text="${comment.content}"></p>
+
+                        <ul class="children" th:if="${comment.reply.size() != 0}">
+                            <li class="comment-item" th:each="reply:${comment.reply}">
+                                <div class="post__author author vcard inline-items">
+                                    <a href="/moti-blog"><img th:src="${user.img}" alt="author"></a>
+                                    <div class="author-date">
+                                        <a class="h6 post__author-name fn" href="/moti-blog" th:text="${user.name}"></a>
+                                        <div class="post__date">
+                                            <time class="published" th:text="${#dates.format(reply.time,'yyyy年MM月dd日 HH:mm:ss')}"></time>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p th:text="${reply.content}"></p>
+
+                            </li>
+                        </ul>
+
+                    </li>
+
+                </ul>
+
+                <!-- Comment Form  -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>留言</h3>
+                    </div>
+                    <div class="card-body">
+                        <input type="text" id="name" class="form-control" placeholder="请输入你的昵称" autocomplete="off">
+                        <input type="text" id="email" class="form-control" placeholder="请输入你的邮箱地址" autocomplete="off">
+                        <textarea id="content" class="form-control" placeholder="在此处输入留言内容"></textarea>
+                        <button th:onclick="addComment([[${article.id}]])" class="btn btn-md-2 btn-primary">提交留言</button>
+
+                    </div>
+                </div>
+
+                <!-- ... end Comment Form  -->
+            </div>
+        </div>
+
+        <!--侧边栏-->
+        <div class="col col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <aside>
+
+                <!--作者信息-->
+                <div class="ui-block">
+                    <div class="ui-block-title">
+                        <h6 class="title">名片
+                        </h6>
+                    </div>
+                    <article class="hentry blog-post blog-post-v3 featured-post-item">
+                        <div class="row">
+                            <div class="col-12" style="text-align: center;margin-top: 5px">
+                                <div class="author-thumb">
+                                    <a href="/moti-blog"><img style="width: 70px;height: 70px" alt="author" th:src="${user.img}" src="img/friend-harmonic7.jpg" class="avatar"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 0px 40px 0px 40px;color: #515365;">昵称：<a href="/moti-blog">[[${user.name}]]</a></div>
+                        <div th:if="${user.email.trim() != ''}" class="row" style="padding: 0px 40px 0px 40px;color: #515365;">邮箱：[[${user.email}]]</div>
+                        <div th:if="${user.phone.trim() != ''}" class="row" style="padding: 0px 40px 0px 40px;color: #515365;">手机号码：[[${user.phone}]]</div>
+                        <div th:if="${user.qq.trim() != ''}" class="row" style="padding: 0px 40px 0px 40px;color: #515365;">QQ号：[[${user.qq}]]</div>
+                        <div th:if="${user.sex != '保密'}" class="row" style="padding: 0px 40px 0px 40px;color: #515365;">性别：[[${user.sex}]]</div>
+                        <div class="row" style="padding: 0px 40px 0px 40px;color: #515365;">年龄：[[${#dates.year(#dates.createNow()) - #dates.year(user.birthday)}]]</div>
+                        <div class="row" style="padding: 0px 40px 0px 40px;color: #515365;">生日：[[${#dates.format(user.birthday,'MM-dd')}]]</div>
+                        <div th:if="${user.address.trim() != ''}" class="row" style="padding: 0px 40px 0px 40px;color: #515365;">地区：[[${user.address}]]</div>
+                        <div th:if="${user.career.trim() != ''}" class="row" style="padding: 0px 40px 0px 40px;color: #515365;">职业：[[${user.career}]]</div>
+                        <div th:if="${user.info.trim() != ''}" class="row" style="padding: 0px 40px 20px 40px;color: #515365;">个人说明：[[${user.info}]]</div>
+                        <br>
+                    </article>
+                </div>
+
+                <!--公告-->
+                <div class="ui-block">
+                    <div class="ui-block-title">
+                        <h6 class="title">公告</h6>
+                    </div>
+                    <div class="ui-block-content">
+                        <div class="text" style="text-indent: 1em;font-size: 14px" th:text="${front.notice}">
+
+                        </div>
+                        <hr>
+                        <div><a th:if="${front.noticeImg != null}" th:href="@{${front.imgTarget}}"><img style="width: 100%" th:src="${front.noticeImg}" alt=""></a></div>
+                    </div>
+                </div>
+
+                <!--热门文章-->
+                <div class="ui-block">
+                    <div class="ui-block-title">
+                        <h6 class="title">热门文章</h6>
+                    </div>
+                    <div class="ui-block-content">
+
+                        <!-- W-Personal-Info -->
+
+                        <ul class="widget w-personal-info item-block">
+                            <li th:each="article:${famousArticles}" style="margin-top: -20px">
+                                <a th:href="@{article(id=${article.id})}" style="font-weight: 300" class="h6" th:text="${'《'+article.title + '》-' + article.readCount + '次阅读'}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--标签云-->
+                <div class="ui-block">
+                    <div class="ui-block-title">
+                        <h6 class="title">标签云</h6>
+                    </div>
+                    <div class="ui-block-content">
+                        <a th:if="${tag.articleCount >= 6 and tag.articleCount < 9}" th:each="tag:${tags}"
+                           th:text="${tag.name + '('+tag.articleCount+')'}"
+                           style="font-size: 18px"
+                           class="tag-cloud" th:href="@{search(tagId=${tag.id})}"></a>
+                        <a th:if="${tag.articleCount >= 3 and tag.articleCount < 6}" th:each="tag:${tags}"
+                           th:text="${tag.name + '('+tag.articleCount+')'}"
+                           style="font-size: 14px"
+                           class="tag-cloud" th:href="@{search(tagId=${tag.id})}"></a>
+                        <a th:if="${tag.articleCount > 0 and tag.articleCount < 3}" th:each="tag:${tags}"
+                           th:text="${tag.name + '('+tag.articleCount+')'}"
+                           style="font-size: 10px"
+                           class="tag-cloud" th:href="@{search(tagId=${tag.id})}"></a>
+                    </div>
+                </div>
+
+                <!--文集-->
+                <div class="ui-block">
+                    <div class="ui-block-title">
+                        <h6 class="title">文集</h6>
+                    </div>
+                    <div class="ui-block-content">
+                        <ul class="widget w-personal-info item-block">
+                            <li th:each="kind:${kinds}" style="margin-top: -20px;padding: 15px 10px;">
+                                <a th:href="@{search(kindId=${kind.id})}" style="font-weight: 300" class="h6"
+                                   th:text="${kind.name}"></a>
+                                <span class="float-right" th:text="${kind.articleCount + '篇'}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--文章归档-->
+                <div class="ui-block">
+                    <div class="ui-block-title">
+                        <h6 class="title">文章归档</h6>
+                    </div>
+                    <div class="ui-block-content">
+                        <ul class="widget w-personal-info item-block">
+                            <li th:each="archive:${archives}" style="margin-top: -20px;padding: 15px 10px;">
+                                <a th:href="@{search(date=${archive.date})}" style="font-weight: 300" class="h6" th:text="${archive.date}"></a>
+                                <span class="float-right" th:text="${archive.count + '篇'}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+
+    </div>
+
+</div>
+
+<a class="back-to-top" href="#" id="back-top" style="display: none">
+    <img src="front/svg-icons/back-to-top.svg" alt="arrow" class="back-icon">
+</a>
+
+
+
+<!-- JS Scripts -->
+<script src="common/js/jquery-3.4.1.js"></script>
+<script src="front/js/libs/jquery.appear.js"></script>
+<script src="front/js/libs/jquery.mousewheel.js"></script>
+<script src="front/js/libs/perfect-scrollbar.js"></script>
+<script src="front/js/libs/jquery.matchHeight.js"></script>
+<script src="front/js/libs/svgxuse.js"></script>
+<script src="front/js/libs/imagesloaded.pkgd.js"></script>
+<script src="front/js/libs/Headroom.js"></script>
+<script src="front/js/libs/velocity.js"></script>
+<script src="front/js/libs/ScrollMagic.js"></script>
+<script src="front/js/libs/jquery.waypoints.js"></script>
+<script src="front/js/libs/jquery.countTo.js"></script>
+<script src="front/js/libs/popper.min.js"></script>
+<script src="front/js/libs/material.min.js"></script>
+<script src="front/js/libs/bootstrap-select.js"></script>
+<script src="front/js/libs/smooth-scroll.js"></script>
+<script src="front/js/libs/selectize.js"></script>
+<script src="front/js/libs/swiper.jquery.js"></script>
+<script src="front/js/libs/moment.js"></script>
+<script src="front/js/libs/daterangepicker.js"></script>
+<script src="front/js/libs/fullcalendar.js"></script>
+<script src="front/js/libs/isotope.pkgd.js"></script>
+<script src="front/js/libs/ajax-pagination.js"></script>
+<script src="front/js/libs/Chart.js"></script>
+<script src="front/js/libs/chartjs-plugin-deferred.js"></script>
+<script src="front/js/libs/circle-progress.js"></script>
+<script src="front/js/libs/loader.js"></script>
+<script src="front/js/libs/run-chart.js"></script>
+<script src="front/js/libs/jquery.magnific-popup.js"></script>
+<script src="front/js/libs/jquery.gifplayer.js"></script>
+<script src="front/js/libs/mediaelement-and-player.js"></script>
+<script src="front/js/libs/mediaelement-playlist-plugin.min.js"></script>
+<script src="front/js/libs/ion.rangeSlider.js"></script>
+<script src="front/js/main.js"></script>
+
+<script src="front/js/libs-init/libs-init.js"></script>
+<script defer src="front/fonts/fontawesome-all.js"></script>
+
+<script src="front/Bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script src="common/js/sweetalert.min.js"></script>
+<script src="common/js/article.js"></script>
+
+</body>
+</html>

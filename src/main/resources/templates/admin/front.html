@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主页设置-[[${session.admin.name}]]的博客</title>
+    <meta name="description" content="Free Bootstrap 4 Admin Theme | Pike Admin">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="background/images/favicon.ico">
+    <!-- Switchery css -->
+    <link href="background/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="background/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome CSS -->
+    <link href="background/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom CSS -->
+    <link href="background/css/style.css" rel="stylesheet" type="text/css" />
+    <!-- BEGIN CSS for this page -->
+    <!-- END CSS for this page -->
+</head>
+<body class="adminbody">
+<div id="main">
+    <!-- top bar navigation -->
+    <div th:replace="common/bar::#top"></div>
+    <!-- End Navigation -->
+
+
+    <!-- Left Sidebar -->
+    <div th:replace="common/bar::#sidebar(currUri='front',unRead=${unRead})"></div>
+    <!-- End Sidebar -->
+
+    <div class="content-page">
+
+        <!-- Start content -->
+        <div class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="breadcrumb-holder">
+                            <h1 class="main-title float-left"><i class="fa fa-desktop bigfonts"></i> 主页</h1>
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item">外观</li>
+                                <li class="breadcrumb-item active">主页</li>
+                            </ol>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3><i class="fa fa-edit"></i> 站点信息</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label for="title" class="col-sm-2 col-form-label">站点标题 <small class="form-text text-muted text-danger">必填项</small></label>
+                                    <input th:value="${front.title}" type="text" id="title" class="form-control col-sm-6"  onchange="updateFront()">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label for="subTitle" class="col-sm-2 col-form-label">副标题 <small class="form-text text-muted text-danger">必填项</small></label>
+                                    <input th:value="${front.subTitle}" type="text" id="subTitle" class="form-control col-sm-6" onchange="updateFront()">
+                                </div>
+                            </div>
+                            <!-- end card-body -->
+
+                        </div>
+
+                        <!-- end card -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3><i class="fa fa-edit"></i> 背景墙</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">背景图片 <small class="form-text text-muted text-danger">必填项：建议尺寸 1000*200</small></label>
+                                    <div class="col-sm-4">
+                                        <img th:src="${front.background}" id="img_background" class="img-thumbnail" style="width: 500px;height: 100px" src="common/images/wechat.jpg" alt="">
+                                    </div>
+                                    <input type="file" id="background" onchange="uploadBackground()" accept="image/jpeg,image/jpg,image/png">
+                                </div>
+                            </div>
+                            <!-- end card-body -->
+
+                        </div>
+
+                        <!-- end card -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3><i class="fa fa-edit"></i> 公告</h3>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="form-group row">
+                                    <label for="info" class="col-sm-2 col-form-label">公告内容 <small class="form-text text-muted">可选项</small></label>
+                                    <textarea style="height: 120px;resize: none" class="form-control col-sm-6" id="info" onchange="updateFront()">[[${front.notice}]]</textarea>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="info" class="col-sm-2 col-form-label">公告图片 <small class="form-text text-muted">可选项：建议尺寸 1000*400</small></label>
+                                    <div class="col-sm-4">
+                                        <img th:if="${front.noticeImg != null}" th:src="${front.noticeImg}" id="img_notice" class="img-thumbnail" style="width: 300px;height: 150px" src="common/images/wechat.jpg" alt="">
+                                        <img th:if="${front.noticeImg == null}"  id="img_notice" class="img-thumbnail" style="width: 500px;height: 200px" src="common/images/wechat.jpg" alt="">
+                                    </div>
+                                    <input type="file" id="notice" onchange="uploadNotice()" accept="image/jpeg,image/jpg,image/png,image/gif">
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="info" class="col-sm-2 col-form-label">点击图片跳转到 <small class="form-text text-muted">可选项</small></label>
+                                    <input th:value="${front.imgTarget}" type="text" id="target" class="form-control col-sm-6" placeholder="http://xuewei.world" onchange="updateFront()">
+                                </div>
+
+                            </div>
+                            <!-- end card-body -->
+
+                        </div>
+                        <!-- end card -->
+
+                    </div>
+                    <!-- end col -->
+
+                </div>
+
+            </div>
+            <!-- END container-fluid -->
+
+        </div>
+        <!-- END content -->
+
+    </div>
+    <!-- END content-page -->
+
+    <div th:replace="common/bar::#footer"></div>
+
+</div>
+<!-- END main -->
+
+<script src="background/js/modernizr.min.js"></script>
+<script src="background/js/jquery.min.js"></script>
+<script src="background/js/moment.min.js"></script>
+
+<script src="background/js/popper.min.js"></script>
+<script src="background/js/bootstrap.min.js"></script>
+
+<script src="background/js/detect.js"></script>
+<script src="background/js/fastclick.js"></script>
+<script src="background/js/jquery.blockUI.js"></script>
+<script src="background/js/jquery.nicescroll.js"></script>
+<script src="background/js/jquery.scrollTo.min.js"></script>
+<script src="background/plugins/switchery/switchery.min.js"></script>
+
+<!-- App js -->
+<script src="background/js/pikeadmin.js"></script>
+<script src="common/js/sweetalert.min.js"></script>
+<script src="common/js/common.js"></script>
+<script src="common/js/front.js"></script>
+
+<!-- BEGIN Java Script for this page -->
+
+<!-- END Java Script for this page -->
+
+</body>
+</html>

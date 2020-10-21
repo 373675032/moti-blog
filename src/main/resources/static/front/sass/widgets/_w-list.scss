@@ -1,0 +1,21 @@
+/*------------- #W-LIST --------------*/
+
+
+
+.w-list {
+  a {
+	color: $body-font-color;
+	padding: 8px 0;
+	display: block;
+	font-weight: 500;
+	position: relative;
+
+	&:hover {
+	  color: $primary-color;
+	}
+  }
+
+  ul {
+	margin-bottom: 0;
+  }
+}

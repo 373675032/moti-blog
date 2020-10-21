@@ -1,0 +1,42 @@
+
+
+<!-- Header-BP-logout -->
+
+<header class="header header--logout" id="site-header">
+	<a href="02-ProfilePage.html" class="logo">
+		<div class="img-wrap">
+			<img src="img/logo.png" alt="Olympus">
+		</div>
+	</a>
+
+	<div class="page-title">
+		<h6>{{#if page-title}}{{page-title}}{{else}}Default Page{{/if}}</h6>
+	</div>
+
+	<div class="header-content-wrapper">
+		<form class="search-bar w-search notification-list friend-requests">
+			<div class="form-group with-button">
+				<input class="form-control js-user-search" placeholder="Search here people or pages..." type="text">
+				<button>
+					<svg class="olymp-magnifying-glass-icon"><use xlink:href="svg-icons/sprites/icons.svg#olymp-magnifying-glass-icon"></use></svg>
+				</button>
+			</div>
+		</form>
+
+		<div class="form--login-logout">
+			<form class="form-inline">
+				<div class="form-group">
+					<input class="form-control form-control-sm" type="text" placeholder="Username" value="" required>
+				</div>
+				<div class="form-group">
+					<input class="form-control form-control-sm" type="password" placeholder="Password" value="" required>
+				</div>
+				<button class="btn btn-primary btn-md-2">Login</button>
+			</form>
+			<a href="#" class="btn btn-primary btn-md-2 login-btn-responsive" data-toggle="modal" data-target="#registration-login-form-popup">Login</a>
+		</div>
+	</div>
+
+</header>
+
+<!-- ... end Header-BP-logout -->

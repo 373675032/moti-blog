@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计-[[${session.admin.name}]]的博客</title>
+    <meta name="description" content="Free Bootstrap 4 Admin Theme | Pike Admin">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="background/images/favicon.ico">
+    <!-- Switchery css -->
+    <link href="background/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="background/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome CSS -->
+    <link href="background/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom CSS -->
+    <link href="background/css/style.css" rel="stylesheet" type="text/css" />
+    <!-- BEGIN CSS for this page -->
+    <link rel="stylesheet" type="text/css" href="common/css/dataTables.bootstrap4.min.css"/>
+    <style>
+        td.details-control {
+            background: url('background/plugins/datatables/img/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+        tr.shown td.details-control {
+            background: url('background/plugins/datatables/img/details_close.png') no-repeat center center;
+        }
+        .num{
+            color: dodgerblue;
+            font-weight: bold;
+        }
+    </style>
+    <!-- END CSS for this page -->
+</head>
+<body class="adminbody">
+<div id="main">
+    <!-- top bar navigation -->
+    <div th:replace="common/bar::#top"></div>
+    <!-- End Navigation -->
+
+
+    <!-- Left Sidebar -->
+    <div th:replace="common/bar::#sidebar(currUri='statistics',unRead=${unRead})"></div>
+    <!-- End Sidebar -->
+
+    <div class="content-page">
+
+        <!-- Start content -->
+        <div class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="breadcrumb-holder">
+                            <h1 class="main-title float-left"><i class="fa fa-bar-chart bigfonts"></i> 统计</h1>
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item">后台管理</li>
+                                <li class="breadcrumb-item active">统计</li>
+                            </ol>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+                <!--图表统计-->
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h3><i class="fa fa-line-chart"></i> 访问统计</h3>
+                                </div>
+
+                                <div class="card-body">
+                                    <canvas id="lineChart"></canvas>
+                                </div>
+                                <div class="card-footer small text-muted">每天12:00更新前一天的访问数据</div>
+                            </div><!-- end card-->
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="card mb-3">
+                                <div class="card-header"><h3><i class="fa fa-eye"></i> 来访概况</h3></div>
+                                <div class="card-body">
+                                    <table class="table table-responsive-xl">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col" width="25%">访客</th>
+                                            <th scope="col" width="25%">点击</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">昨天：</th>
+                                            <td class="num counter" th:text="${statisticsCount.get('yesterday').requests}"></td>
+                                            <td class="num counter" th:text="${statisticsCount.get('yesterday').visitor}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">最近7天 (周) ：</th>
+                                            <td class="num counter" th:text="${statisticsCount.get('week').requests}"></td>
+                                            <td class="num counter" th:text="${statisticsCount.get('week').visitor}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">最近30天 (月) ：</th>
+                                            <td class="num counter" th:text="${statisticsCount.get('month').requests}"></td>
+                                            <td class="num counter" th:text="${statisticsCount.get('month').visitor}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">最近365天 (年) ：</th>
+                                            <td class="num counter" th:text="${statisticsCount.get('year').requests}"></td>
+                                            <td class="num counter" th:text="${statisticsCount.get('year').visitor}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">总计：</th>
+                                            <td class="num counter" th:text="${statisticsCount.get('total').requests}"></td>
+                                            <td class="num counter" th:text="${statisticsCount.get('total').visitor}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="card-footer small text-muted">每天12:00更新前一天的访问数据</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
+                        <div class="card mb-3">
+                            <div class="card-header"><h3><i class="fa fa-clock-o"></i> 最近访客</h3></div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-bordered table-hover display" style="text-align: center">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 10%">IP</th>
+                                            <th style="width: 5%">日期</th>
+                                            <th style="width: 10%">访问</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody style="font-size: 13px">
+                                        <tr th:each="visitor:${visitors}">
+                                            <td class="num" th:text="${visitor.statistics.ip}"></td>
+                                            <td th:text="${#dates.format(visitor.statistics.requestDate,'YYYY年MM月dd日')}"></td>
+                                            <td th:if="${visitor.target == '主页'}">
+                                                <a href="/moti-blog" class="num">主页</a>
+                                            </td>
+                                            <td th:if="${visitor.target != '主页'}">
+                                                <a th:href="@{article(id=${visitor.statistics.articleId})}" th:text="${visitor.target}"></a>
+                                            </td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- END container-fluid -->
+
+        </div>
+        <!-- END content -->
+
+    </div>
+    <!-- END content-page -->
+
+    <div th:replace="common/bar::#footer"></div>
+
+</div>
+<!-- END main -->
+
+<script src="background/js/modernizr.min.js"></script>
+<script src="background/js/jquery.min.js"></script>
+<script src="background/js/moment.min.js"></script>
+
+<script src="background/js/popper.min.js"></script>
+<script src="background/js/bootstrap.min.js"></script>
+
+<script src="background/js/detect.js"></script>
+<script src="background/js/fastclick.js"></script>
+<script src="background/js/jquery.blockUI.js"></script>
+<script src="background/js/jquery.nicescroll.js"></script>
+<script src="background/js/jquery.scrollTo.min.js"></script>
+<script src="background/plugins/switchery/switchery.min.js"></script>
+
+<!-- App js -->
+<script src="background/js/pikeadmin.js"></script>
+<script src="common/js/sweetalert.min.js"></script>
+<script src="common/js/common.js"></script>
+
+<!-- BEGIN Java Script for this page -->
+<script src="common/js/jquery.dataTables.min.js"></script>
+<script src="common/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="background/plugins/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="background/plugins/counterup/jquery.counterup.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // counter-up
+        $('.counter').counterUp({
+            delay: 10,
+            time: 600
+        });
+        $('#example1').DataTable({
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            "aoColumnDefs": [ { "bSortable": false, "aTargets": [2] }],
+        });
+
+    } );
+</script>
+<script>
+    var ctx1 = document.getElementById("lineChart").getContext('2d');
+    var lineChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: [(${statistics.getDatesString()})],
+            datasets: [{
+                label: '访客',
+                backgroundColor: '#3EB9DC',
+                data: [[${statistics.getVisitorsString()}]]
+            }, {
+                label: '访问',
+                backgroundColor: '#EBEFF3',
+                data: [[${statistics.getRequestsString()}]]
+            }]
+
+        },
+        options: {
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    stacked: true,
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
+            }
+        }
+    });
+
+</script>
+
+<!-- END Java Script for this page -->
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑文章-[[${session.admin.name}]]的博客</title>
+    <meta name="description" content="Free Bootstrap 4 Admin Theme | Pike Admin">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="background/images/favicon.ico">
+    <!-- Switchery css -->
+    <link href="background/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="background/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome CSS -->
+    <link href="background/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom CSS -->
+    <link href="background/css/style.css" rel="stylesheet" type="text/css" />
+    <!-- BEGIN CSS for this page -->
+    <link rel="stylesheet" type="text/css" href="common/css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="background/EditorMD/lib/codemirror/codemirror.min.css">
+    <link rel="stylesheet" href="background/EditorMD/css/editormd.css">
+    <link rel="stylesheet" href="common/tagsinput/jquery-tagsinput.min.css">
+    <style>
+        .tag{
+            color: white;
+        }
+    </style>
+    <!-- END CSS for this page -->
+</head>
+<body class="adminbody">
+<div id="main">
+    <!-- top bar navigation -->
+    <div th:replace="common/bar::#top"></div>
+    <!-- End Navigation -->
+
+
+    <!-- Left Sidebar -->
+    <div th:replace="common/bar::#sidebar(currUri='new',unRead=${unRead})"></div>
+    <!-- End Sidebar -->
+
+    <div class="content-page">
+
+        <!-- Start content -->
+        <div class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="breadcrumb-holder">
+                            <h1 class="main-title float-left">
+                                <i class="fa fa-pencil bigfonts"></i> 开始你的创作 &ensp;
+                            </h1>
+
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item">文章</li>
+                                <li class="breadcrumb-item active">写文章</li>
+                            </ol>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <div class="form-group row" style="padding: 0px 10px">
+                            <img th:if="${article.img != null}" th:src="${article.img}" class="img-thumbnail" id="img_head" style="width: 100%;height:150px " alt="">
+                            <img th:if="${article.img == null}" class="img-thumbnail" id="img_head" style="width: 100%;height:150px " alt="">
+                        </div>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8" style="padding: 60px 0">
+                        <input type="file" name="image" onchange="uploadImg()" id="img" accept="image/jpeg,image/jpg,image/png"><br>
+                        <small class="text-danger">你可以上传这篇文章的封面</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group row" style="padding: 0px 10px">
+                            <input th:value="${article.title}" type="text" class="form-control col-sm-12" id="title" autocomplete="off" placeholder="请输入文章标题">
+                            <input th:value="${article.id}" type="hidden" id="id">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="form-group row" style="padding: 0px 10px">
+                            <textarea th:if="${article.introduce != null}" th:text="${article.introduce}" class="form-control col-sm-12" id="info" maxlength="100" placeholder="选填，摘要会在文章外进行显示，帮助读者快速了解内容，如不填写则默认抓取正文前54字"></textarea>
+                            <textarea th:if="${article.introduce == null}" class="form-control col-sm-12" id="info" maxlength="100" placeholder="选填，摘要会在文章外进行显示，帮助读者快速了解内容，如不填写则默认抓取正文前100字"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12" style="height: 100vh">
+                        <div id="editormd">
+                            <textarea th:if="${article.content != null}" id="content" style="display:none;" th:text="${article.content}"></textarea>
+                            <textarea th:if="${article.content == null}" id="content" style="display:none;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3>编辑文章的信息</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="col-form-label"><span style="font-weight: bold">文章标签</span>
+                                        <small class="form-text text-muted text-danger">你可以使用回车生成标签</small>
+                                    </label>
+                                    <input data-role='tags-input' th:if="${tag != null}" th:value="${tag}" id="tags" style="padding: 0px 10px">
+                                    <input data-role='tags-input' th:if="${tag == null}" id="tags" style="padding: 0px 10px">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label"><span style="font-weight: bold">添加到文集</span>
+                                        <small class="form-text text-muted text-danger">你可以将此文章添加到已有的文集中</small>
+                                    </label>
+                                    <select class="form-control" id="kind">
+                                        <option th:if="${kind == null}" value=""></option>
+                                        <option th:if="${kind != null}" th:value="${kind.name}" th:text="${kind.name}"></option>
+                                        <option th:if="${kind != null}" value=""></option>
+                                        <option th:each="kind:${kinds}" th:value="${kind.name}" th:text="${kind.name}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    当前文章状态：
+                                    <span th:if="${article.status == 0}">草稿</span>
+                                    <span th:if="${article.status == 1}">已发表</span>
+                                    <span th:if="${article.status == 2}">回收站</span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-success btn-sm" onclick="updatePublish()"><i class="fa fa-recycle"></i> 更新并发表</button>
+                                <button class="btn btn-primary btn-sm" onclick="updateDraft()"><i class="fa fa-save"></i> 保存到草稿</button>
+                            </div>
+
+
+                        </div><!-- end card-->
+                    </div>
+                </div>
+            </div>
+            <!-- END container-fluid -->
+
+        </div>
+        <!-- END content -->
+
+    </div>
+    <!-- END content-page -->
+
+    <div th:replace="common/bar::#footer"></div>
+
+</div>
+<!-- END main -->
+
+<script src="background/js/modernizr.min.js"></script>
+<script src="background/js/jquery.min.js"></script>
+<script src="background/js/moment.min.js"></script>
+
+<script src="background/js/popper.min.js"></script>
+<script src="background/js/bootstrap.min.js"></script>
+
+<script src="background/js/detect.js"></script>
+<script src="background/js/fastclick.js"></script>
+<script src="background/js/jquery.blockUI.js"></script>
+<script src="background/js/jquery.nicescroll.js"></script>
+<script src="background/js/jquery.scrollTo.min.js"></script>
+<script src="background/plugins/switchery/switchery.min.js"></script>
+
+<!-- App js -->
+<script src="background/js/pikeadmin.js"></script>
+
+<!-- BEGIN Java Script for this page -->
+<!--引入MarkDown-->
+<script type="text/javascript" src="background/EditorMD/editormd.amd.min.js"></script>
+<script>
+    var editor;
+    $(function () {
+        editor = editormd("editormd", {
+            placeholder: "此处开始编写文章的内容...",
+            path: 'background/EditorMD/lib/',
+            saveHTMLToTextarea: true,//注意3：这个配置，方便post提交表单
+            /**上传图片相关配置如下*/
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "image/article",//注意你后端的上传图片服务地址
+            taskList: true,
+            tocm: true,         // Using [TOCM]
+            tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+            flowChart: true,             // 开启流程图支持，默认关闭
+            sequenceDiagram: true,
+            codeFold: true,
+            watch: true,
+            toolbarIcons : function() {
+                // Or return editormd.toolbarModes[name]; // full, simple, mini
+                return ["undo", "redo", "|", "bold", "italic", "quote", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "|", "list-ul", "list-ol", "hr", "|", "link", "image", "code", "code-block", "table", "html-entities", "|", "watch", "preview", "clear", "|", "help"]
+            },
+        });
+
+        //监听粘贴服务
+        document.addEventListener('paste', function (event) {
+            var items = (event.clipboardData || window.clipboardData).items;
+            var file = null;
+            if (items && items.length) {
+                // 搜索剪切板items
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) {
+                        file = items[i].getAsFile();
+                        break;
+                    }
+                }
+            } else {
+                alert("当前浏览器不支持");
+                return;
+            }
+            if (!file) {
+                return;
+            }
+            // 此时file就是我们的剪切板中的图片对象
+            // 这里是上传
+            var xhr = new XMLHttpRequest();
+            // 上传结束
+            xhr.onload = function () {
+
+            };
+            xhr.onerror = function () {
+                alert("网络异常，上传失败!");
+            };
+            var formData = new FormData();
+            formData.append("editormd-image-file", file);
+            xhr.open('POST', 'image/article', true);
+            xhr.send(formData);
+            xhr.onreadystatechange = function () {
+                if(xhr.readyState === 4){
+                    if(xhr.status >=200 && xhr.status < 300 || xhr.status === 304){
+                        //5.处理返回的结果
+                        var obj = xhr.responseText;
+                        var objarr = eval("("+obj+")");
+                        if (objarr["success"] == 1){
+                            editor.insertValue("![](" + objarr["url"] + ")");
+                        }else{
+                            alert("粘贴图片失败!");
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+<script src="common/tagsinput/jquery.color.plus-names.min.js"></script>
+<script src="common/tagsinput/jquery-tagsinput.min.js" defer></script>
+<script src="common/js/article.js"></script>
+<script src="common/js/sweetalert.min.js"></script>
+<script src="common/js/common.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-role="tags-input"]').tagsInput();
+    });
+    function uploadImg() {
+        let id = $('#id').val().trim();
+        var formdata=new FormData();
+        formdata.append("image",$("#img").get(0).files[0]);
+        formdata.append("flag",6);
+        formdata.append("id",id);
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "image/upload",
+            dataType: "json",
+            data: formdata,
+            contentType:false,//ajax上传图片需要添加
+            processData:false,//ajax上传图片需要添加
+            success: function (data) {
+                if (data['code']== 200){
+                    $('#img_head').attr("src",data['data']);
+                    swal("成功", "上传成功", "success");
+                }else {
+                    swal("错误", "服务器发生了一个错误", "error");
+                }
+            },
+            error: function (e) {
+            }
+        });
+    }
+</script>
+</body>
+</html>

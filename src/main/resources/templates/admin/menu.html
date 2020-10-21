@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜单-[[${session.admin.name}]]的博客</title>
+    <meta name="description" content="Free Bootstrap 4 Admin Theme | Pike Admin">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="background/images/favicon.ico">
+    <!-- Switchery css -->
+    <link href="background/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="background/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome CSS -->
+    <link href="background/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom CSS -->
+    <link href="background/css/style.css" rel="stylesheet" type="text/css" />
+    <!-- BEGIN CSS for this page -->
+    <link rel="stylesheet" type="text/css" href="common/css/dataTables.bootstrap4.min.css"/>
+    <style>
+        td.details-control {
+            background: url('background/plugins/datatables/img/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+        tr.shown td.details-control {
+            background: url('background/plugins/datatables/img/details_close.png') no-repeat center center;
+        }
+    </style>
+    <!-- END CSS for this page -->
+</head>
+<body class="adminbody">
+<div id="main">
+    <!-- top bar navigation -->
+    <div th:replace="common/bar::#top"></div>
+    <!-- End Navigation -->
+
+
+    <!-- Left Sidebar -->
+    <div th:replace="common/bar::#sidebar(currUri='menu',unRead=${unRead})"></div>
+    <!-- End Sidebar -->
+
+    <div class="content-page">
+
+        <!-- Start content -->
+        <div class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="breadcrumb-holder">
+                            <h1 class="main-title float-left">
+                                <i class="fa fa-desktop bigfonts"></i> 菜单 &ensp;
+                            </h1>
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item">外观</li>
+                                <li class="breadcrumb-item active">菜单</li>
+                            </ol>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3> 添加新菜单</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="name">名称</label>
+                                    <input type="text" class="form-control" id="name" autocomplete="off">
+                                    <small class="text-danger">必填项</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">链接地址</label>
+                                    <input type="text" class="form-control" id="target" autocomplete="off">
+                                    <small class="text-danger">必填项</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">位置</label>
+                                    <select class="form-control" id="location">
+                                        <option value="0">左</option>
+                                        <option value="1">右</option>
+                                    </select>
+                                    <small>相对于主页中心头像</small>
+                                </div>
+                                <button onclick="addMenu()" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 添加</button>
+                            </div>
+                        </div><!-- end card-->
+                    </div>
+
+                    <div class="col-xs-12 col-sm-8 col-md-8">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-bordered table-hover display">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 10%">ID</th>
+                                            <th style="width: 30%">名称</th>
+                                            <th style="width: 30%">链接地址</th>
+                                            <th style="width: 15%">位置</th>
+                                            <th style="width: 15%">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody style="font-size: 13px">
+                                        <tr th:each="menu:${menus}">
+                                           <td th:text="${menu.id}"></td>
+                                           <td th:text="${menu.name}"></td>
+                                           <td th:text="${menu.url}"></td>
+                                           <td th:if="${menu.location == 0}">左</td>
+                                           <td th:if="${menu.location == 1}">右</td>
+                                            <td>
+                                                <button th:onclick="deleteMenu([[${menu.id}]])" class="btn btn-sm btn-danger" title="删除"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <thead>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div><!-- end card-->
+                    </div>
+                </div>
+
+            </div>
+            <!-- END container-fluid -->
+
+        </div>
+        <!-- END content -->
+
+    </div>
+    <!-- END content-page -->
+
+    <div th:replace="common/bar::#footer"></div>
+
+</div>
+<!-- END main -->
+
+<script src="background/js/modernizr.min.js"></script>
+<script src="background/js/jquery.min.js"></script>
+<script src="background/js/moment.min.js"></script>
+
+<script src="background/js/popper.min.js"></script>
+<script src="background/js/bootstrap.min.js"></script>
+
+<script src="background/js/detect.js"></script>
+<script src="background/js/fastclick.js"></script>
+<script src="background/js/jquery.blockUI.js"></script>
+<script src="background/js/jquery.nicescroll.js"></script>
+<script src="background/js/jquery.scrollTo.min.js"></script>
+<script src="background/plugins/switchery/switchery.min.js"></script>
+
+<!-- App js -->
+<script src="background/js/pikeadmin.js"></script>
+
+<!-- BEGIN Java Script for this page -->
+<script src="common/js/sweetalert.min.js"></script>
+<script src="common/js/common.js"></script>
+<script src="common/js/jquery.dataTables.min.js"></script>
+<script src="common/js/dataTables.bootstrap4.min.js"></script>
+<script src="common/js/front.js"></script>
+
+<script>
+    // START CODE FOR BASIC DATA TABLE
+    $(document).ready(function() {
+        $('#example1').DataTable({
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            "order": [ 0, "desc" ]
+        });
+    });
+
+</script>
+<!-- END Java Script for this page -->
+
+</body>
+</html>

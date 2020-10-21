@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的资料-[[${session.admin.name}]]的博客</title>
+    <meta name="description" content="Free Bootstrap 4 Admin Theme | Pike Admin">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="background/images/favicon.ico">
+    <!-- Switchery css -->
+    <link href="background/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="background/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome CSS -->
+    <link href="background/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom CSS -->
+    <link href="background/css/style.css" rel="stylesheet" type="text/css" />
+
+    <script src="background/js/modernizr.min.js"></script>
+    <script src="background/js/jquery.min.js"></script>
+    <script src="background/js/moment.min.js"></script>
+
+    <!-- BEGIN CSS for this page -->
+    <link href="background/plugins/datetimepicker/css/daterangepicker.css" rel="stylesheet" />
+    <!-- END CSS for this page -->
+</head>
+<body class="adminbody">
+<div id="main">
+    <!-- top bar navigation -->
+    <div th:replace="common/bar::#top"></div>
+    <!-- End Navigation -->
+
+
+    <!-- Left Sidebar -->
+    <div th:replace="common/bar::#sidebar(currUri='profile',unRead=${unRead})"></div>
+    <!-- End Sidebar -->
+
+    <div class="content-page">
+
+        <!-- Start content -->
+        <div class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="breadcrumb-holder">
+                            <h1 class="main-title float-left"><i class="fa fa-user bigfonts"></i> 我的资料</h1>
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item">后台管理</li>
+                                <li class="breadcrumb-item active">我的资料</li>
+                            </ol>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <div class="card mb-3">
+                                <div class="card-header">
+                                    <h3><i class="fa fa-edit"></i> 基本信息</h3>
+                                </div>
+
+                                <div class="card-body">
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">头像</label>
+                                            <div class="col-sm-4">
+                                                <img th:src="${session.admin.img}" class="img-thumbnail" id="img_head" style="width: 150px;height:150px " alt="">
+                                            </div>
+                                            <input type="file" name="image" onchange="uploadImg()" id="img" accept="image/jpeg,image/jpg,image/png">
+                                        </div>
+                                        <hr>
+                                        <div class="form-group row">
+                                            <label for="name" class="col-sm-2 col-form-label">作者昵称 <small class="form-text text-muted text-danger">必填项</small></label>
+                                            <input th:value="${session.admin.name}" type="text" class="form-control col-sm-6" id="name" autocomplete="off">
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="address" class="col-sm-2 col-form-label">所在地区 <small class="form-text text-muted">可选项</small></label>
+                                            <input th:value="${session.admin.address}" type="text" class="form-control col-sm-6" id="address" autocomplete="off">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="career" class="col-sm-2 col-form-label">职业 <small class="form-text text-muted">可选项</small></label>
+                                            <input th:value="${session.admin.career}" type="text" class="form-control col-sm-6" id="career" autocomplete="off">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="address" class="col-sm-2 col-form-label">出生日期 <small class="form-text text-muted text-danger">必填项</small></label>
+                                            <input th:value="${#dates.format(session.admin.birthday,'yyyy年MM月dd日')}" id="birthdayStr" type="text" class="form-control col-sm-6" />
+                                            <script>
+                                                $(function() {
+                                                    $('#birthdayStr').daterangepicker({
+                                                        singleDatePicker: true,
+                                                        showDropdowns: true,
+                                                        locale: {
+                                                            format: 'YYYY年MM月DD日'
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">性别 <small class="form-text text-muted text-danger">必填项</small></label>
+                                            <div class="form-check form-check-inline">
+                                                <input th:checked="${session.admin.sex == '男'}" class="form-check-input" type="radio" name="sex" id="man" value="男">
+                                                <label class="form-check-label" for="man" > 男</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input th:checked="${session.admin.sex == '女'}" class="form-check-input" type="radio" name="sex" id="woman" value="女">
+                                                <label class="form-check-label" for="woman"> 女</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input th:checked="${session.admin.sex == '保密'}" class="form-check-input" type="radio" name="sex" id="secret" value="保密">
+                                                <label class="form-check-label" for="secret"> 保密</label>
+                                            </div>
+                                        </div>
+
+                                        <button onclick="updateBasic()" class="btn btn-primary">修改基本信息</button>
+                                </div>
+                                <!-- end card-body -->
+
+                </div>
+                            <!-- end card -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3><i class="fa fa-edit"></i> 联系方式</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label for="email" class="col-sm-2 col-form-label">邮箱地址 <small class="form-text text-muted">可选项</small></label>
+                                    <input th:value="${session.admin.email}" type="email" class="form-control col-sm-6" id="email" autocomplete="off" >
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="phone" class="col-sm-2 col-form-label">手机号码 <small class="form-text text-muted">可选项</small></label>
+                                    <input th:value="${session.admin.phone}" type="number" class="form-control col-sm-6" id="phone" autocomplete="off" >
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="qq" class="col-sm-2 col-form-label">QQ号码 <small class="form-text text-muted">可选项</small></label>
+                                    <input th:value="${session.admin.qq}" type="number" class="form-control col-sm-6" id="qq" autocomplete="off" >
+                                </div>
+                                <hr>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">微信二维码 <small class="form-text text-muted">可选项</small></label>
+                                    <div class="col-sm-4">
+                                        <img th:src="${session.admin.wechat}" id="img_wechat" class="img-thumbnail" style="width: 150px;height: 150px" src="common/images/wechat.jpg" alt="">
+                                    </div>
+                                    <input type="file" id="wechat" onchange="uploadWechat()" accept="image/jpeg,image/jpg,image/png">
+                                </div>
+                                <hr>
+                                <div class="form-group row">
+                                    <label  class="col-sm-2 col-form-label">微信公众号二维码 <small class="form-text text-muted">可选项</small></label>
+                                    <div class="col-sm-4">
+                                        <img th:src="${session.admin.publicWechat}" id="img_public_wechat" class="img-thumbnail" style="width: 150px;height: 150px"  alt="">
+                                    </div>
+                                    <input type="file" onchange="uploadPublicWechat()" id="public_wechat" accept="image/jpeg,image/jpg,image/png">
+                                </div>
+
+                                <button onclick="updateContact()" class="btn btn-primary">修改联系方式</button>
+                            </div>
+                            <!-- end card-body -->
+
+                        </div>
+                            <!-- end card -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3><i class="fa fa-edit"></i> 其他</h3>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="form-group row">
+                                    <label for="info" class="col-sm-2 col-form-label">个人说明 <small class="form-text text-muted">可选项</small></label>
+                                    <textarea class="form-control col-sm-6" id="info">[[${session.admin.info}]]</textarea>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="info" class="col-sm-2 col-form-label">最近登录时间</label>
+                                    <input th:value="${#dates.format(session.admin.recentLogin,'yyyy年MM月dd日 HH:mm:ss')}" class="form-control col-sm-6" disabled>
+                                </div>
+
+                                <button onclick="updateOther()" class="btn btn-primary">修改其他信息</button>
+
+                            </div>
+                            <!-- end card-body -->
+
+                        </div>
+                            <!-- end card -->
+
+                    </div>
+                    <!-- end col -->
+
+                </div>
+
+
+            </div>
+            <!-- END container-fluid -->
+
+        </div>
+        <!-- END content -->
+
+    </div>
+    <!-- END content-page -->
+
+    <div th:replace="common/bar::#footer"></div>
+
+</div>
+<!-- END main -->
+
+<script src="background/js/modernizr.min.js"></script>
+<script src="background/js/jquery.min.js"></script>
+<script src="background/js/moment.min.js"></script>
+
+<script src="background/js/popper.min.js"></script>
+<script src="background/js/bootstrap.min.js"></script>
+
+<script src="background/js/detect.js"></script>
+<script src="background/js/fastclick.js"></script>
+<script src="background/js/jquery.blockUI.js"></script>
+<script src="background/js/jquery.nicescroll.js"></script>
+<script src="background/js/jquery.scrollTo.min.js"></script>
+<script src="background/plugins/switchery/switchery.min.js"></script>
+
+<!-- App js -->
+<script src="background/js/pikeadmin.js"></script>
+
+<!-- BEGIN Java Script for this page -->
+<script src="common/js/sweetalert.min.js"></script>
+<script src="common/js/common.js"></script>
+<script src="background/plugins/datetimepicker/js/moment.min.js"></script>
+<script src="background/plugins/datetimepicker/js/daterangepicker.js"></script>
+<script src="common/js/profile.js"></script>
+<!-- END Java Script for this page -->
+
+</body>
+</html>

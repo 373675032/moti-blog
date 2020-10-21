@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--顶部公共部分-->
+<div class="headerbar" id="top" >
+    <!-- LOGO -->
+    <div class="headerbar-left" style="text-align: left;padding-left: 30px">
+        <a href="index" class="logo" target="_blank">
+            <i class="fa fa-hand-peace-o"></i>
+            <span>前台首页</span>
+        </a>
+    </div>
+    <nav class="navbar-custom">
+        <ul class="list-inline float-right mb-0">
+            <li class="list-inline-item dropdown notif">
+                <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button"
+                   aria-haspopup="false" aria-expanded="false">
+                    <i class="fa fa-fw fa-cog"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-arrow-success dropdown-lg">
+                    <!-- item-->
+                    <div class="dropdown-item noti-title">
+                        <h5><small>设置</small></h5>
+                    </div>
+                    <!-- item-->
+                    <a href="javaScript:resetEs()" class="dropdown-item notify-item">
+                        <p class="notify-details ml-0">
+                            <b>重建ElasticSearch</b>
+                        </p>
+                    </a>
+                    <a href="javaScript:cleanRedis()" class="dropdown-item notify-item">
+                        <p class="notify-details ml-0">
+                            <b>清空Redis</b>
+                        </p>
+                    </a>
+                    <!-- All-->
+                    <a title="Clcik to visit Pike Admin Website" target="_blank" href="http://xuewei.world"
+                       class="dropdown-item notify-item notify-all">
+                        <i class="fa fa-link"></i> 访问作者网站
+                    </a>
+                </div>
+            </li>
+
+            <li class="list-inline-item dropdown notif">
+                <a class="nav-link dropdown-toggle nav-user" data-toggle="dropdown" href="#" role="button"
+                   aria-haspopup="false" aria-expanded="false">
+                    <img th:src="${session.admin.img}" id="img_head1" alt="Profile image" class="avatar-rounded">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+
+                    <!-- item-->
+                    <div class="dropdown-item noti-title">
+                        <a href="/moti-blog"><h5 class="text-overflow"><small th:text="${session.admin.name}"></small></h5></a>
+                    </div>
+
+                    <!-- item-->
+                    <a href="profile" class="dropdown-item notify-item">
+                        <i class="fa fa-user"></i> <span>我的资料</span>
+                    </a>
+
+                    <!-- item-->
+                    <a href="logout" class="dropdown-item notify-item">
+                        <i class="fa fa-power-off"></i> <span>退出登录</span>
+                    </a>
+                </div>
+            </li>
+
+        </ul>
+
+    </nav>
+</div>
+<!--侧边菜单公共部分-->
+<div class="left main-sidebar position-fixed" id="sidebar">
+
+    <div class="sidebar-inner leftscroll">
+
+        <div id="sidebar-menu">
+
+            <ul>
+                <li class="submenu">
+                    <a href="dashboard" th:class="${currUri == 'index' ? 'active':''}"><i class="fa fa-dashboard bigfonts"></i><span> 仪表盘 </span> </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="profile" th:class="${currUri == 'profile' ? 'active':''}"><i class="fa fa-user bigfonts"></i><span> 我的资料 </span> </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="articles" th:class="${currUri == 'articles' or currUri == 'new' ? 'active':''}"><i class="fa fa-book bigfonts" ></i><span> 文章 </span></a>
+                </li>
+
+                <li class="submenu">
+                    <a href="kinds" th:class="${currUri == 'kinds' ? 'active':''}"><i class="fa fa-tasks bigfonts"></i><span> 文集 </span> </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="tags" th:class="${currUri == 'tags' ? 'active':''}"><i class="fa fa-tags bigfonts"></i><span> 标签 </span> </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="comments" th:class="${currUri == 'comments' ? 'active':''}"><i class="fa fa-comment bigfonts"></i><span> 评论 </span> <span th:if="${unRead > 0}" class="label radius-circle bg-danger float-right">[[${unRead}]]</span> </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="#"><i class="fa fa-desktop bigfonts"></i><span> 外观 </span></a>
+                    <ul class="list-unstyled">
+                        <li><a href="front" th:class="${currUri == 'front' ? 'active':''}">主页</a></li>
+                        <li><a href="menu" th:class="${currUri == 'menu' ? 'active':''}">菜单</a></li>
+                        <li><a href="link" th:class="${currUri == 'link' ? 'active':''}">友情链接</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="statistics" th:class="${currUri == 'statistics' ? 'active':''}"><i class="fa fa-bar-chart bigfonts"></i><span> 统计 </span> </a>
+                </li>
+
+            </ul>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+        <div class="clearfix"></div>
+
+    </div>
+
+</div>
+<!--底部公共部分-->
+<footer class="footer" id="footer">
+		<span class="text-right">
+            Copyright © 2020 <span th:text="${session.admin.name}"></span>
+		</span>
+    <span class="float-right">
+		 备案号: <a href="http://www.beian.miit.gov.cn/" target="_blank">冀ICP备19025674号-2</a>
+		</span>
+</footer>
+</body>
+</html>

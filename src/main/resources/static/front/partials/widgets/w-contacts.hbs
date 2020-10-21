@@ -1,0 +1,56 @@
+
+<!-- Contacts -->
+
+<div class="widget w-contacts">
+	<!-- Google map -->
+
+	<div class="section">
+		<div id="map"></div>
+		<script>
+			var map;
+
+			function initMap() {
+
+				var myLatLng = {lat: -25.363, lng: 131.044};
+
+				map = new google.maps.Map(document.getElementById('map'), {
+					center: myLatLng,
+					zoom: 14,
+					scrollwheel: false//set to true to enable mouse scrolling while inside the map area
+				});
+
+				var marker = new google.maps.Marker({
+					position: myLatLng,
+					map: map,
+					icon: {
+						url: "img/marker-google.png",
+						scaledSize: new google.maps.Size(50, 50)
+					}
+
+				});
+			}
+
+
+		</script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBESxStZOWN9aMvTdR3Nov66v6TXxpRZMM&callback=initMap"
+				async defer></script>
+	</div>
+
+	<!-- End Google map -->
+
+	<ul>
+		<li>
+			<span class="title">Address:</span>
+			<span class="text">Fake Street 320, San Francisco California, USA.
+							</span>
+		</li>
+		<li>
+			<span class="title">Working Hours:</span>
+			<span class="text">Mon-Fri 9:00am to 6:00pm
+								Weekends 10:00am to 8:00pm
+							</span>
+		</li>
+	</ul>
+</div>
+
+<!-- ... end Contacts -->

@@ -1,0 +1,115 @@
+/*------------- #STYLES for Range Sliders --------------*/
+
+
+
+.range-slider {
+  .irs-line {
+	border-radius: 5px;
+  }
+
+  .irs-line-left,
+  .irs-line-mid,
+  .irs-line-right {
+	background: none;
+	background-color: $border-color;
+  }
+
+  .irs-bar {
+	background: none;
+  }
+
+  .irs-slider {
+	background: none;
+	background-color: $border-color;
+	border-radius: 100%;
+
+	&:before {
+	  content: '';
+	  display: block;
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  transform: translate(-50%, -50%);
+	  width: 10px;
+	  height: 10px;
+	  opacity: .7;
+	  border-radius: 100%;
+	  transition: all .3s ease;
+	}
+
+	&:hover {
+	  &:before {
+		opacity: 1;
+	  }
+	}
+  }
+}
+
+.range-slider--primary {
+
+  .irs-bar {
+	background-color: $primary-color;
+  }
+
+  .irs-grid-pol {
+	background: $primary-color;
+  }
+
+  .irs-slider {
+
+	&:before {
+	  background-color: $primary-color;
+	}
+  }
+}
+
+.range-slider--red {
+  .irs-bar {
+	background-color: $breez;
+  }
+
+  .irs-grid-pol {
+	background: $breez;
+  }
+
+  .irs-slider {
+
+	&:before {
+	  background-color: $breez;
+	}
+  }
+}
+
+.range-slider--green {
+  .irs-bar {
+	background-color: $yellow;
+  }
+
+  .irs-grid-pol {
+	background: $yellow;
+  }
+
+  .irs-slider {
+
+	&:before {
+	  background-color: $yellow;
+	}
+  }
+}
+
+.range-slider--blue {
+  .irs-bar {
+	background-color: $blue-light;
+  }
+
+  .irs-grid-pol {
+	background: $blue-light;
+  }
+
+  .irs-slider {
+
+	&:before {
+	  background-color: $blue-light;
+	}
+  }
+}

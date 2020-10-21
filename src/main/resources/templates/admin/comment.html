@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查看评论-[[${session.admin.name}]]的博客</title>
+    <meta name="description" content="Free Bootstrap 4 Admin Theme | Pike Admin">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="background/images/favicon.ico">
+    <!-- Switchery css -->
+    <link href="background/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="background/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome CSS -->
+    <link href="background/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom CSS -->
+    <link href="background/css/style.css" rel="stylesheet" type="text/css" />
+    <!-- BEGIN CSS for this page -->
+    <link rel="stylesheet" type="text/css" href="common/css/dataTables.bootstrap4.min.css"/>
+    <style>
+        td.details-control {
+            background: url('background/plugins/datatables/img/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+        tr.shown td.details-control {
+            background: url('background/plugins/datatables/img/details_close.png') no-repeat center center;
+        }
+    </style>
+    <!-- END CSS for this page -->
+</head>
+<body class="adminbody">
+<div id="main">
+    <!-- top bar navigation -->
+    <div th:replace="common/bar::#top"></div>
+    <!-- End Navigation -->
+
+
+    <!-- Left Sidebar -->
+    <div th:replace="common/bar::#sidebar(currUri='comments',unRead=${unRead})"></div>
+    <!-- End Sidebar -->
+
+    <div class="content-page">
+
+        <!-- Start content -->
+        <div class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="breadcrumb-holder">
+                            <h1 class="main-title float-left">
+                                <i class="fa fa-comment bigfonts"></i> 评论 &ensp;
+                            </h1>
+
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item">评论</li>
+                                <li class="breadcrumb-item active">查看评论</li>
+                            </ol>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                评论内容
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <span style="font-weight: bold" th:text="${comment.name}"></span>
+                                    ([[${ comment.email }]])
+                                    在你的文章
+                                    <a style="font-weight: bold" th:href="@{article(id=${comment.articleId})}" th:text="${'《'+comment.title+'》'}"></a>
+                                    下评论：
+                                    <hr>
+                                    <div th:text="${comment.content}" style="text-indent: 2em"></div>
+                                    <hr>
+                                    <small class="float-right" th:text="${#dates.format(comment.time,'yyyy-MM-dd HH:mm:ss')}"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                回复
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div>
+                                        <textarea id="content" class="form-control" style="height: 120px" placeholder="在此处输入回复的内容..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" id="sendEmail" class="form-check-input">
+                                        <input type="hidden" id="id" th:value="${comment.id}">
+                                        发送邮件通知ta
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="float-right btn btn-success btn-sm" onclick="replyComment()"><i class="fa fa-send"></i> 回复</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6 col-sm-6 col-md-6" th:if="${comment.reply.size() > 0}">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                你的回复
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group" th:each="reply:${comment.reply}">
+                                    <div class="row">
+                                        <div class="col-xs-8 col-sm-8 col-md-8" style="text-indent: 2em" th:text="${reply.content}">
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <small class="float-right" th:text="${#dates.format(reply.time,'yyyy-MM-dd HH:mm:ss')}"></small>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+            <!-- END container-fluid -->
+
+        </div>
+        <!-- END content -->
+
+    </div>
+    <!-- END content-page -->
+
+    <div th:replace="common/bar::#footer"></div>
+
+</div>
+<!-- END main -->
+
+<script src="background/js/modernizr.min.js"></script>
+<script src="background/js/jquery.min.js"></script>
+<script src="background/js/moment.min.js"></script>
+
+<script src="background/js/popper.min.js"></script>
+<script src="background/js/bootstrap.min.js"></script>
+
+<script src="background/js/detect.js"></script>
+<script src="background/js/fastclick.js"></script>
+<script src="background/js/jquery.blockUI.js"></script>
+<script src="background/js/jquery.nicescroll.js"></script>
+<script src="background/js/jquery.scrollTo.min.js"></script>
+<script src="background/plugins/switchery/switchery.min.js"></script>
+
+<!-- App js -->
+<script src="background/js/pikeadmin.js"></script>
+
+<!-- BEGIN Java Script for this page -->
+<script src="common/js/jquery.dataTables.min.js"></script>
+<script src="common/js/dataTables.bootstrap4.min.js"></script>
+<script src="common/js/sweetalert.min.js"></script>
+<script src="common/js/comments.js"></script>
+
+<script>
+    // START CODE FOR BASIC DATA TABLE
+    $(document).ready(function() {
+        $('#example1').DataTable({
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1,2,6,7 ] }],
+            "order": [5, "desc"]
+        });
+    });
+    // END CODE FOR BASIC DATA TABLE
+
+
+    // START CODE FOR Child rows (show extra / detailed information) DATA TABLE
+
+
+</script>
+<!-- END Java Script for this page -->
+
+</body>
+</html>

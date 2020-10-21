@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moti.mapper.StatisticsMapper">
+
+    <!--statistics的映射结果集-->
+    <resultMap type="com.moti.entity.Statistics" id="StatisticsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="requestCount" column="request_count" jdbcType="INTEGER"/>
+        <result property="requestDate" column="request_date" jdbcType="TIMESTAMP"/>
+        <result property="articleId" column="article_id" jdbcType="INTEGER"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> id, ip, request_count, request_date, article_id </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="ip != null and ip != ''">
+                ip,
+        </if>
+        <if test="requestCount != null">
+                request_count,
+        </if>
+        <if test="requestDate != null">
+                request_date,
+        </if>
+        <if test="articleId != null">
+                article_id,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="ip != null and ip != ''">
+                #{ip},
+        </if>
+        <if test="requestCount != null">
+                #{requestCount},
+        </if>
+        <if test="requestDate != null">
+                #{requestDate},
+        </if>
+        <if test="articleId != null">
+                #{articleId},
+        </if>
+    </sql>
+    
+    <!--通用对Statistics各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="ip != null and ip != ''">
+                ip = #{ip},
+        </if>
+        <if test="requestCount != null">
+                request_count = #{requestCount},
+        </if>
+        <if test="requestDate != null">
+                request_date = #{requestDate},
+        </if>
+        <if test="articleId != null">
+                article_id = #{articleId},
+        </if>
+    </sql>
+    
+    <!--新增statistics:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into statistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除statistics:通过主键-->
+    <delete id="deleteById">
+        delete from statistics
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+    
+    <!--查询单个statistics-->
+    <select id="queryById" resultMap="StatisticsMap">
+        select
+        <include refid="allColumn"></include>
+        from statistics
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="StatisticsMap">
+        select
+          <include refid="allColumn"></include>
+        from statistics
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsValue"></include>
+        </trim>
+        order by request_date desc
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update statistics
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!--根据IP地址获取访问数据-->
+    <select id="findByIp" resultType="com.moti.entity.Statistics">
+        select
+        <include refid="allColumn"></include>
+        from statistics
+        where ip = #{ip} and article_id = #{aId} AND request_date = CURDATE();
+    </select>
+
+    <!--获取从昨天开始近10天的日期-->
+    <select id="getRecentDates" resultType="java.util.Date">
+        SELECT DISTINCT request_date FROM statistics ORDER BY request_date DESC LIMIT 1,10
+    </select>
+
+    <!--获取从昨天开始近10天每天的访问量-->
+    <select id="getRecentRequests" resultType="java.lang.Integer">
+        SELECT SUM(request_count),request_date FROM statistics GROUP BY request_date ORDER BY request_date DESC LIMIT 1,10
+    </select>
+
+    <!--获取从昨天开始近10天每天的访客数-->
+    <select id="getRecentVisitors" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT ip),request_date FROM statistics GROUP BY request_date ORDER BY request_date DESC LIMIT 1,10
+    </select>
+
+    <!--获取不同时间段的访问数量-->
+    <select id="getRequestCount" resultType="java.lang.Integer">
+        select SUM(request_count),request_date FROM statistics
+        <where>
+            /*昨天*/
+            <if test="type == 1">
+                request_date = ADDDATE(CURDATE(),-1)
+            </if>
+            /*最近7天*/
+            <if test="type == 7">
+                request_date BETWEEN ADDDATE(CURDATE(),-8) AND ADDDATE(CURDATE(),-1)
+            </if>
+            /*最近30天*/
+            <if test="type == 30">
+                request_date BETWEEN ADDDATE(CURDATE(),-31) AND ADDDATE(CURDATE(),-1)
+            </if>
+            /*最近1年*/
+            <if test="type == 365">
+                request_date BETWEEN ADDDATE(CURDATE(),-366) AND ADDDATE(CURDATE(),-1)
+            </if>
+            /*总共*/
+            <if test="type == -1">
+                1=1
+            </if>
+        </where>
+    </select>
+
+    <!--获取不同时间段的访客数量-->
+    <select id="getVisitorCount" resultType="java.lang.Integer">
+        select COUNT(DISTINCT ip) FROM statistics
+        <where>
+            /*昨天*/
+            <if test="type == 1">
+                request_date = ADDDATE(CURDATE(),-1)
+            </if>
+            /*最近7天*/
+            <if test="type == 7">
+                request_date BETWEEN ADDDATE(CURDATE(),-8) AND ADDDATE(CURDATE(),-1)
+            </if>
+            /*最近30天*/
+            <if test="type == 30">
+                request_date BETWEEN ADDDATE(CURDATE(),-31) AND ADDDATE(CURDATE(),-1)
+            </if>
+            /*最近1年*/
+            <if test="type == 365">
+                request_date BETWEEN ADDDATE(CURDATE(),-366) AND ADDDATE(CURDATE(),-1)
+            </if>
+            /*总共*/
+            <if test="type == -1">
+                1=1
+            </if>
+        </where>
+    </select>
+
+    <!--添加IP的访问数次数-->
+    <update id="addRequestCount">
+        update statistics
+        set request_count = request_count + 1
+        where ip = #{ip} and article_id = #{aId} AND request_date = CURDATE();
+    </update>
+
+</mapper>

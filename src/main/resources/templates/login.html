@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>登录-博客后台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" media="screen" href="login/css/style.css">
+    <link rel="stylesheet" type="text/css" href="login/css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="common/css/xtiper.css" />
+</head>
+<body>
+<div id="particles-js">
+    <div class="login">
+        <div class="login-top">
+            登录博客后台
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-img"><img src="https://gitee.com/cn_moti/moti-img/raw/master/2020-10-06/675a6ab555c84f74a01b97d59551419b.png" /></div>
+            <div class="login-center-input">
+                <input id="name" type="text" name="" placeholder="请输入您的用户名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'" autocomplete="off" />
+                <div class="login-center-input-text">用户名</div>
+            </div>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-img"><img src="https://gitee.com/cn_moti/moti-img/raw/master/2020-10-06/486591f061994b549049ef3c47c53d9e.png" /></div>
+            <div class="login-center-input">
+                <input id="password" type="password" name="" value="" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'" />
+                <div class="login-center-input-text">密码</div>
+            </div>
+        </div>
+        <div class="login-button">
+            登陆
+        </div>
+        <div class="login-qq">
+            <a href="loginByQQ"><img src="https://gitee.com/cn_moti/moti-img/raw/master/2020-10-11/3016c269659c42faaf0b4f16cf10dfc5.png" alt="QQ登录" title="QQ登录"></a>
+        </div>
+    </div>
+    <div class="sk-rotating-plane"></div>
+</div>
+
+<script src="login/js/particles.min.js"></script>
+<script src="login/js/app.js"></script>
+<script src="common/js/xtiper.min.js"></script>
+<script src="common/js/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+    function hasClass(elem, cls) {
+        cls = cls || '';
+        if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
+        return new RegExp(' ' + cls + ' ').test(' ' + elem.className + ' ');
+    }
+
+    function addClass(ele, cls) {
+        if (!hasClass(ele, cls)) {
+            ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+        }
+    }
+
+    function removeClass(ele, cls) {
+        if (hasClass(ele, cls)) {
+            var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+            while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+                newClass = newClass.replace(' ' + cls + ' ', ' ');
+            }
+            ele.className = newClass.replace(/^\s+|\s+$/g, '');
+        }
+    }
+    document.querySelector(".login-button").onclick = function(){
+        var name = document.getElementById("name").value.trim();
+        var password = document.getElementById("password").value.trim();
+        if (name == "" || password == ""){
+            xtip.msg('用户名和密码不能为空哦');
+            return;
+        }else {
+            addClass(document.querySelector(".login"), "active")
+            setTimeout(function () {
+                addClass(document.querySelector(".sk-rotating-plane"), "active")
+                document.querySelector(".login").style.display = "none"
+            }, 800)
+            setTimeout(function () {
+                removeClass(document.querySelector(".login"), "active")
+                removeClass(document.querySelector(".sk-rotating-plane"), "active")
+                document.querySelector(".login").style.display = "block";
+                /*
+                    发送Ajax请求登录
+                 */
+                $.ajax({
+                    type: "POST",
+                    url: "login",
+                    data: {name:name, password:password},
+                    dataType: "json",
+                    success: function(data){
+                        if (data['code']== 200){
+                            var location = window.location.href;
+                            let strings = location.split("moti-blog");
+                            window.location.href = strings[0]+"moti-blog/dashboard";
+                        }else {
+                            xtip.confirm('请检查你的用户名和密码！','',{icon:'e',title:'登录失败',btn:[]});
+                        }
+                    }
+                });
+            }, 2000)
+        }
+    }
+</script>
+</body>
+</html>

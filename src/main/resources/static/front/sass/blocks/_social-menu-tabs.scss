@@ -1,0 +1,41 @@
+/*------------- #SOCIAL MENU TABS --------------*/
+
+
+.social-menu-tabs {
+  border-bottom: none;
+  justify-content: center;
+
+  &.nav-tabs .nav-link.active {
+	color: $primary-color;
+	border-bottom-color: $primary-color;
+  }
+
+  &.nav-tabs .nav-link {
+	display: flex;
+	align-items: center;
+	padding: 25px;
+	border: none;
+	border-bottom: 3px solid transparent;
+	border-right: 1px solid $border-color;
+	font-weight: 700;
+	color: $heading-color;
+
+	svg {
+	  fill: $icon-color;
+	  margin-right: 10px;
+	}
+  }
+
+  &.nav-tabs .nav-item:first-child .nav-link {
+	border-left: 1px solid $border-color;
+  }
+}
+
+
+/*------------- Responsive mode styles --------------*/
+
+@media (max-width: 768px) {
+  .social-menu-tabs.nav-tabs .nav-link {
+	padding: 15px;
+  }
+}

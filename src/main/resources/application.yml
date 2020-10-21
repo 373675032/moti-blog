@@ -1,0 +1,90 @@
+# 配置应用相关
+server:
+  servlet:
+    context-path: /moti-blog
+    session:
+      timeout: 60m
+  tomcat:
+    uri-encoding: UTF-8
+
+# 配置保存日志相关
+logging:
+  file:
+    name: log/moti-blog.log
+  level:
+    root: warn
+
+# 配置MyBatis相关
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+spring:
+  # 配置RabbitMq
+  rabbitmq:
+    host: 192.168.30.132
+    port: 5672
+    username: moti
+    password: 123456
+    virtual-host: /moti-blog
+  # 配置静态资源访问
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/static/
+  # 禁用ThymeLeaf缓存
+  thymeleaf:
+    cache: false
+  # 配置邮件任务
+  mail:
+    username: 373675032@qq.com
+    password:
+    host: smtp.qq.com
+    port: 465
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+  # 配置数据源
+  datasource:
+    username: root
+    password:
+    url: jdbc:mysql://127.0.0.1:3306/moti-blog?serverTimezone=Hongkong&useAffectedRows=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+# 配置Redis
+redis:
+  host: 192.168.30.132
+  port: 6379
+  timeout: 10
+  poolMaxTotal: 1000
+  poolMaxIdle: 500
+  poolMaxWait: 500
+
+

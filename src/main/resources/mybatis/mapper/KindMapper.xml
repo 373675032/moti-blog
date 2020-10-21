@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moti.mapper.KindMapper">
+
+    <!--开启二级缓存,使用Ehcache缓存框架-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
+    <!--kind的映射结果集-->
+    <resultMap type="com.moti.entity.Kind" id="KindMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="introduce" column="introduce" jdbcType="VARCHAR"/>
+        <result property="img" column="img" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <!--全部字段-->
+    <sql id="allColumn"> id, name, introduce, img </sql>
+    
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="name != null and name != ''">
+                name,
+        </if>
+        <if test="introduce != null and introduce != ''">
+                introduce,
+        </if>
+        <if test="img != null and img != ''">
+                img,
+        </if>
+    </sql>
+    
+    <!--添加语句的值列表-->
+        <sql id="insertValue">
+        <if test="name != null and name != ''">
+                #{name},
+        </if>
+        <if test="introduce != null and introduce != ''">
+                #{introduce},
+        </if>
+        <if test="img != null and img != ''">
+                #{img},
+        </if>
+    </sql>
+    
+    <!--通用对Kind各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="name != null and name != ''">
+                name = #{name},
+        </if>
+        <if test="introduce != null and introduce != ''">
+                introduce = #{introduce},
+        </if>
+        <if test="img != null and img != ''">
+                img = #{img},
+        </if>
+    </sql>
+    
+    <!--新增kind:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into kind
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+   
+    <!--删除kind:通过主键-->
+    <delete id="deleteById">
+        delete from kind
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+    
+    <!--查询单个kind-->
+    <select id="queryById" resultMap="KindMap">
+        select
+        <include refid="allColumn"></include>
+        from kind
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="KindMap">
+        select
+          <include refid="allColumn"></include>
+        from kind
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="commonsValue"></include>
+        </trim>
+        order by id desc
+    </select>
+
+    <!--获取文集的数量-->
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(*) from kind
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update kind
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>

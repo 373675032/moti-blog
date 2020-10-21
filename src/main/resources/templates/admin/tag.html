@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑标签-[[${session.admin.name}]]的博客</title>
+    <meta name="description" content="Free Bootstrap 4 Admin Theme | Pike Admin">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="background/images/favicon.ico">
+    <!-- Switchery css -->
+    <link href="background/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link href="background/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome CSS -->
+    <link href="background/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom CSS -->
+    <link href="background/css/style.css" rel="stylesheet" type="text/css" />
+    <!-- BEGIN CSS for this page -->
+    <link rel="stylesheet" type="text/css" href="common/css/dataTables.bootstrap4.min.css"/>
+    <style>
+        td.details-control {
+            background: url('background/plugins/datatables/img/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+        tr.shown td.details-control {
+            background: url('background/plugins/datatables/img/details_close.png') no-repeat center center;
+        }
+    </style>
+    <!-- END CSS for this page -->
+</head>
+<body class="adminbody">
+<div id="main">
+    <!-- top bar navigation -->
+    <div th:replace="common/bar::#top"></div>
+    <!-- End Navigation -->
+
+
+    <!-- Left Sidebar -->
+    <div th:replace="common/bar::#sidebar(currUri='tags',unRead=${unRead})"></div>
+    <!-- End Sidebar -->
+
+    <div class="content-page">
+
+        <!-- Start content -->
+        <div class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="breadcrumb-holder">
+                            <h1 class="main-title float-left">
+                                <i class="fa fa-tags bigfonts"></i> 标签 &ensp;
+                            </h1>
+                            <ol class="breadcrumb float-right">
+                                <li class="breadcrumb-item"><a href="tags">全部标签</a></li>
+                                <li class="breadcrumb-item active">编辑标签《[[${tag.name}]]》</li>
+                            </ol>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3> 编辑标签《[[${tag.name}]]》</h3>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="form-group row">
+                                    <label for="name" class="col-sm-2 col-form-label">名称 <small class="form-text text-muted text-danger">必填项</small></label>
+                                    <input th:value="${tag.name}" type="text" class="form-control col-sm-6" id="name" autocomplete="off">
+                                    <input th:value="${tag.id}" type="hidden" id="id">
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="info" class="col-sm-2 col-form-label">描述信息 <small class="form-text text-muted">可选项</small></label>
+                                    <textarea class="form-control col-sm-6" id="info" style="height: 150px">[[${tag.introduce}]]</textarea>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">封面</label>
+                                    <div class="col-sm-4">
+                                        <img th:if="${tag.img != null}" th:src="${tag.img}" class="img-thumbnail" id="img_head" style="width: 200px;height:100px " alt="">
+                                        <img th:if="${tag.img == null}" class="img-thumbnail" id="img_head" style="width: 200px;height:100px " alt="">
+                                    </div>
+                                    <input type="file" name="image" onchange="uploadImg()" id="img" accept="image/jpeg,image/jpg,image/png">
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                    <button type="submit" onclick="updateTag()" class="btn btn-primary"><i class="fa fa-recycle"></i> 更新</button>
+                                    <button th:onclick="deleteTag([[${tag.id}]])" class="btn btn-danger"><i class="fa fa-trash"></i> 删除</button>
+                            </div>
+                        </div><!-- end card-->
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- END container-fluid -->
+
+        </div>
+        <!-- END content -->
+
+    </div>
+    <!-- END content-page -->
+
+    <div th:replace="common/bar::#footer"></div>
+
+</div>
+<!-- END main -->
+
+<script src="background/js/modernizr.min.js"></script>
+<script src="background/js/jquery.min.js"></script>
+<script src="background/js/moment.min.js"></script>
+
+<script src="background/js/popper.min.js"></script>
+<script src="background/js/bootstrap.min.js"></script>
+
+<script src="background/js/detect.js"></script>
+<script src="background/js/fastclick.js"></script>
+<script src="background/js/jquery.blockUI.js"></script>
+<script src="background/js/jquery.nicescroll.js"></script>
+<script src="background/js/jquery.scrollTo.min.js"></script>
+<script src="background/plugins/switchery/switchery.min.js"></script>
+
+<!-- App js -->
+<script src="background/js/pikeadmin.js"></script>
+
+<!-- BEGIN Java Script for this page -->
+<script src="common/js/sweetalert.min.js"></script>
+<script src="common/js/common.js"></script>
+<script src="common/js/jquery.dataTables.min.js"></script>
+<script src="common/js/dataTables.bootstrap4.min.js"></script>
+<script src="common/js/tags.js"></script>
+
+<script>
+    // START CODE FOR BASIC DATA TABLE
+    $(document).ready(function() {
+        $('#example1').DataTable({
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            "aoColumnDefs": [ { "bSortable": false, "aTargets": [1,2,4] }],
+            "order": [ 0, "desc" ]
+        });
+    });
+    // END CODE FOR BASIC DATA TABLE
+
+
+    // START CODE FOR Child rows (show extra / detailed information) DATA TABLE
+
+
+</script>
+<!-- END Java Script for this page -->
+
+</body>
+</html>
